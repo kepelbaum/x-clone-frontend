@@ -1,7 +1,30 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "../lib/login";
+import { useState } from "react";
+import { useAppState } from "../lib/context";
 
 export default function Home() {
+  const [name, setName] = useState("");
+  const [pass, setPass] = useState("");
+  const [conf, setConf] = useState("");
+  const { register } = useAuth();
+  const { errors } = useAppState();
+
+  function handleUser(e) {
+    setName(e.target.value);
+  }
+
+  function handlePass(e) {
+    setPass(e.target.value);
+  }
+
+  function handleConf(e) {
+    setConf(e.target.value);
+  }
+
   return (
     <div className="w-screen h-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10">
       <Image
@@ -13,11 +36,22 @@ export default function Home() {
       ></Image>
       <div className="md:flex md:flex-col flex flex-col md:flex-row justify-center items-center gap-10">
         <p className="text-4xl font-bold">Create Account</p>
-        <p className="text-2xl font-bold">Error messages go here...</p>
+        <div className="flex flex-col">
+          {errors.map((error, index) => (
+            <p
+              key={index}
+              className="text-2xl text-red-500 font-bold text-white"
+            >
+              {error}
+              {"\n"}
+            </p>
+          ))}
+        </div>
         <div className="flex flex-col gap-5">
           <input
             type="text"
             placeholder="Username (handle)"
+            onChange={handleUser}
             className="rounded-md border-2 border-gray-300 bg-gray-900 px-4 py-2 text-white placeholder-white
                hover:border-blue-400
                focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/50 focus:placeholder-transparent"
@@ -25,6 +59,7 @@ export default function Home() {
           <input
             type="password"
             placeholder="Password"
+            onChange={handlePass}
             className="rounded-md border-2 border-gray-300 bg-gray-900 px-4 py-2 text-white placeholder-white
                hover:border-blue-400
                focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/50 focus:placeholder-transparent"
@@ -32,6 +67,7 @@ export default function Home() {
           <input
             type="password"
             placeholder="Confirm password"
+            onChange={handleConf}
             className="rounded-md border-2 border-gray-300 bg-gray-900 px-4 py-2 text-white placeholder-white
                hover:border-blue-400
                focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/50 focus:placeholder-transparent"
@@ -39,6 +75,7 @@ export default function Home() {
         </div>
         <button
           type="submit"
+          onClick={() => register(name, pass, conf)}
           className="rounded-full bg-blue-500 text-white border-white border-2 w-[250px] h-[50px] font-bold"
         >
           Submit

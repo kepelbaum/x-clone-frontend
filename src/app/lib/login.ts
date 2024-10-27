@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppState } from "./context";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
   const {
@@ -40,15 +40,15 @@ export function useAuth() {
       const data = await response.json();
       console.log("Response:", data);
 
-      if (data.error) {
-        setErrors([data.error]);
+      if (data.errors) {
+        setErrors(data.errors);
         console.log(errors);
       } else {
         setErrors([]);
         setToken(data.accessToken);
         setUser(name);
         localStorage.setItem("token", data.accessToken);
-        localStorage.setItem("username", "newestuser");
+        localStorage.setItem("username", name);
         router.push("/home");
       }
     } catch (error) {
@@ -60,25 +60,25 @@ export function useAuth() {
   const logAsGuest = async () => {
     try {
       const response = await fetch(
-        "https://x-clone-backend-production-15d8.up.railway.app/api/auth/login",
+        "https://x-clone-backend-production-15d8.up.railway.app/api/auth/guest",
         {
           mode: "cors",
           method: "POST",
-          body: JSON.stringify({
-            username: "newestuser",
-            password: "newestuser", //need to have backend always authorize it through login
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
+          // body: JSON.stringify({
+          //   username: "newestuser",
+          //   password: "newestuser", //need to have backend always authorize it through login
+          // }),
+          // headers: {
+          //   "Content-type": "application/json; charset=UTF-8",
+          // },
         }
       );
 
       const data = await response.json();
       console.log("Response:", data);
 
-      if (data.error) {
-        setErrors([data.error]);
+      if (data.errors) {
+        setErrors(data.errors);
       } else {
         setErrors([]);
         setToken(data.accessToken);
@@ -92,5 +92,44 @@ export function useAuth() {
       setErrors(["An error occurred during login"]);
     }
   };
-  return { loginSubmit, logAsGuest };
+
+  const register = async (name: string, pass: string, conf: string) => {
+    if (pass == null || pass != conf) {
+      setErrors(["Passwords do not match"]);
+    } else {
+      try {
+        const response = await fetch(
+          "https://x-clone-backend-production-15d8.up.railway.app/api/auth/register",
+          {
+            mode: "cors",
+            method: "POST",
+            body: JSON.stringify({
+              username: name,
+              password: pass,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Response:", data);
+
+        if (data.errors) {
+          setErrors(data.errors);
+          console.log(errors);
+        } else {
+          setErrors([]);
+          loginSubmit(name, pass);
+          // router.push("/home");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        setErrors(["An error occurred during login"]);
+      }
+    }
+  };
+
+  return { loginSubmit, logAsGuest, register };
 }
