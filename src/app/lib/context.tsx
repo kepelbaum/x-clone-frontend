@@ -23,6 +23,8 @@ type AppContextType = {
   errors: string[];
   setErrors: (errors: string[]) => void;
   logout: () => void;
+  updateCounter: number;
+  setUpdateCounter: (value: number) => void;
 };
 
 export const AppContext = createContext<AppContextType>({
@@ -37,6 +39,8 @@ export const AppContext = createContext<AppContextType>({
   errors: [],
   setErrors: () => {},
   logout: () => {},
+  updateCounter: 0,
+  setUpdateCounter: () => {},
 });
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -45,6 +49,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [updateCounter, setUpdateCounter] = useState(0);
 
   const router = useRouter();
 
@@ -69,6 +74,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     errors,
     setErrors,
     logout,
+    updateCounter,
+    setUpdateCounter,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

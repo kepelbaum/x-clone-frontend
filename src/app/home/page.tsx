@@ -11,7 +11,7 @@ import { Tweet } from "../lib/tweet";
 import { Rightsection } from "../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users } = useAppState();
+  const { logout, posts, users, updateCounter } = useAppState();
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
@@ -20,7 +20,7 @@ export default function Home() {
   useEffect(() => {
     fetchPosts();
     fetchUsers();
-  }, []);
+  }, [updateCounter]);
 
   // useEffect(() => {
   //   console.log(posts);
@@ -38,9 +38,13 @@ export default function Home() {
             <TopHomeMenu />
             <Messagebox />
 
-            {posts.map((post) => (
-              <Tweet key={post.post_id} post={post} />
-            ))}
+            {posts
+              .sort((a, b) => {
+                return a.post_id > b.post_id ? -1 : 1;
+              })
+              .map((post) => (
+                <Tweet key={post.post_id} post={post} />
+              ))}
           </main>
           <Rightsection />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>

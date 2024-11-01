@@ -1,15 +1,59 @@
 "use client";
 
 import { useAppState } from "../lib/context";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function Messagebox() {
-  const {} = useAppState();
+  const token = localStorage.getItem("token");
+  const { updateCounter, setUpdateCounter } = useAppState();
+  const [content, setContent] = useState("");
+
+  const hasContent = content.length > 0;
+  const isOverLimit = content.length > 255;
+
+  const router = useRouter();
+
+  async function submitTweet() {
+    if (hasContent && !isOverLimit) {
+      try {
+        const response = await fetch(
+          "https://x-clone-backend-production-15d8.up.railway.app/api/post",
+          {
+            mode: "cors",
+            method: "POST",
+            body: JSON.stringify({
+              content: content,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              authorization: "Bearer " + (token ? token.toString() : ""),
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.post_id) {
+          setUpdateCounter(updateCounter + 1);
+          setContent("");
+          // router.push("/home");
+        } else {
+          console.log("Error - unable to create tweet");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        console.log(["An error occurred during tweet post"]);
+      }
+    }
+  }
+
   return (
     <div className="border-b border-gray-600 p-4">
       <div className="flex gap-3">
         <div className="w-10 h-10 rounded-full bg-white flex-shrink-0" />
         <div className="flex-grow">
           <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             placeholder="What's happening?"
             className="w-full bg-transparent text-xl text-white placeholder-gray-500 border-none resize-none outline-none min-h-[120px]"
           />
@@ -88,12 +132,26 @@ export function Messagebox() {
                 </svg>
               </button>
             </div>
-            <button
-              className="bg-blue-500 text-white px-4 py-1.5 rounded-full font-bold hover:bg-blue-600 disabled:opacity-50"
-              disabled={true}
-            >
-              Post
-            </button>
+            <div className="flex items-center gap-4">
+              <span
+                className={`text-sm ${
+                  content.length === 0
+                    ? "text-gray-500"
+                    : isOverLimit
+                    ? "text-red-500"
+                    : "text-gray-400"
+                }`}
+              >
+                {content.length}/255
+              </span>
+              <button
+                onClick={submitTweet}
+                className="bg-blue-500 text-white px-4 py-1.5 rounded-full font-bold hover:bg-blue-600 disabled:opacity-50 disabled:hover:bg-blue-500"
+                disabled={!hasContent || isOverLimit}
+              >
+                Post
+              </button>
+            </div>
           </div>
         </div>
       </div>

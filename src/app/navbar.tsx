@@ -2,6 +2,7 @@
 
 import { useAppState } from "./lib/context";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Navbar({ mb }: { mb: number }) {
   const { logout } = useAppState();
@@ -20,7 +21,10 @@ export function Navbar({ mb }: { mb: number }) {
           className="w-[40px] h-[40px] -ml-2 mt-2 -mb-2"
         ></Image>
       </div>
-      <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer py-3 px-5 -mx-5 -my-3">
+      <Link
+        href="/home"
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer py-3 px-5 -mx-5 -my-3"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -37,7 +41,7 @@ export function Navbar({ mb }: { mb: number }) {
           <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Home</p>
-      </div>
+      </Link>
       <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +98,10 @@ export function Navbar({ mb }: { mb: number }) {
         <p className="font-semibold text-xl hidden xl:block">Messages</p>
       </div>
 
-      <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
+      <Link
+        href="/profile"
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -111,7 +118,7 @@ export function Navbar({ mb }: { mb: number }) {
           <circle cx="12" cy="7" r="4" />
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Profile</p>
-      </div>
+      </Link>
 
       <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
         <svg
