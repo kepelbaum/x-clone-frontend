@@ -4,7 +4,11 @@ import { useAppState } from "../lib/context";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function Messagebox() {
+interface OptionalId {
+  id?: number;
+}
+
+export function Messagebox({ id }: OptionalId) {
   const token = localStorage.getItem("token");
   const { updateCounter, setUpdateCounter } = useAppState();
   const [content, setContent] = useState("");
@@ -24,6 +28,7 @@ export function Messagebox() {
             method: "POST",
             body: JSON.stringify({
               content: content,
+              ifreply: id ? id : null,
             }),
             headers: {
               "Content-type": "application/json; charset=UTF-8",

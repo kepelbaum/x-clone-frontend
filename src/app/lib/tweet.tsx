@@ -2,7 +2,8 @@
 
 import { useAppState } from "./context";
 import { Post } from "./definitions";
-
+import { convertTime } from "./utils";
+import Link from "next/link";
 export function Tweet({ post }: { post: Post }) {
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
@@ -37,8 +38,11 @@ export function Tweet({ post }: { post: Post }) {
   }
 
   return (
-    <div className="flex flex-col">
-      {post.isretweet && (
+    <Link
+      href={post.ifreply ? `/posts/${post.ifreply}` : `/posts/${post.post_id}`}
+      className="flex flex-col"
+    >
+      {post.ifretweet && (
         <div className="flex items-center gap-2 px-4 pt-3 text-gray-500 text-sm">
           <svg
             width="16"
@@ -64,7 +68,7 @@ export function Tweet({ post }: { post: Post }) {
             <div className="flex gap-3 items-center flex-wrap">
               <p className="font-bold truncate">{"Placeholder"}</p>
               <p className="text-gray-400 truncate">{"@" + post.username}</p>
-              <p className="text-gray-400 text-sm">{post.date}</p>
+              <p className="text-gray-400 text-sm">{convertTime(post.date)}</p>
             </div>
             <button
               onClick={() => deleteTweet(post.post_id)}
@@ -89,7 +93,11 @@ export function Tweet({ post }: { post: Post }) {
           <p className="break-words">{post.content}</p>
 
           <div className="flex justify-between mt-3 max-w-[425px] text-gray-500">
-            <div className="flex items-center group">
+            <div
+              className={`flex items-center group ${
+                post.ifreply ? "hidden" : ""
+              }`}
+            >
               <button className="p-2 hover:bg-blue-500/10 rounded-full group-hover:text-blue-500">
                 <svg
                   width="20"
@@ -103,18 +111,20 @@ export function Tweet({ post }: { post: Post }) {
               </button>
               <span className="text-sm group-hover:text-blue-500">24</span>
             </div>
+            <div className={`${post.ifreply ? "" : "hidden"}`}></div>
 
             <div
               className={`flex items-center group ${
-                post.isretweet ? "text-green-500" : ""
-              }`}
+                post.ifreply ? "hidden" : ""
+              }
+              ${post.ifretweet ? "text-green-500" : ""}`}
             >
               <button className="p-2 hover:bg-green-500/10 rounded-full group-hover:text-green-500">
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
-                  fill={post.isretweet ? "currentColor" : "none"}
+                  fill={post.ifretweet ? "currentColor" : "none"}
                   stroke="currentColor"
                 >
                   <path d="M17 1l4 4-4 4" />
@@ -125,6 +135,7 @@ export function Tweet({ post }: { post: Post }) {
               </button>
               <span className="text-sm group-hover:text-green-500">5</span>
             </div>
+            <div className={`${post.ifreply ? "" : "hidden"}`}></div>
 
             <div className="flex items-center group">
               <button className="p-2 hover:bg-pink-500/10 rounded-full group-hover:text-pink-500">
@@ -159,6 +170,6 @@ export function Tweet({ post }: { post: Post }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
