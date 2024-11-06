@@ -9,13 +9,19 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import local from "next/font/local";
-import { User, Post } from "./definitions";
+import { User, Post, Message, Follow, Like } from "./definitions";
 
 type AppContextType = {
   posts: Post[];
   setPosts: (posts: Post[]) => void;
   users: User[];
   setUsers: (users: User[]) => void;
+  messages: Message[];
+  setMessages: (messages: Message[]) => void;
+  follows: Follow[];
+  setFollows: (follows: Follow[]) => void;
+  likes: Like[];
+  setLikes: (likes: Like[]) => void;
   user: string;
   setUser: (user: string) => void;
   token: string;
@@ -34,6 +40,12 @@ export const AppContext = createContext<AppContextType>({
   setPosts: () => {},
   users: [],
   setUsers: () => {},
+  messages: [],
+  setMessages: () => {},
+  follows: [],
+  setFollows: () => {},
+  likes: [],
+  setLikes: () => {},
   user: "",
   setUser: () => {},
   token: "",
@@ -50,6 +62,9 @@ export const AppContext = createContext<AppContextType>({
 export function AppProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [follows, setFollows] = useState<Follow[]>([]);
+  const [likes, setLikes] = useState<Like[]>([]);
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
@@ -62,6 +77,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setErrors([]);
     setPosts([]);
     setUsers([]);
+    setMessages([]);
+    setFollows([]);
+    setLikes([]);
     localStorage.setItem("username", "");
     localStorage.setItem("token", "");
     router.push("/");
@@ -72,6 +90,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPosts,
     users,
     setUsers,
+    messages,
+    setMessages,
+    follows,
+    setFollows,
+    likes,
+    setLikes,
     user,
     setUser,
     token,

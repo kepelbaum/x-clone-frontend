@@ -2,18 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import { useAppState } from "../lib/context";
-import { useHomeFetch } from "../lib/fetch";
-import { Navbar } from "../navbar";
-import { Profile } from "./profile";
-import { Rightsection } from "../lib/rightsection";
+import { useAppState } from "../../lib/context";
+import { useHomeFetch } from "../../lib/fetch";
+import { Navbar } from "../../navbar";
+import { Profile } from "./../profile";
+import { Rightsection } from "../../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users, messages, follows, likes } = useAppState();
-
+  const { logout, posts, users } = useAppState();
+  const params = useParams();
   const token = localStorage.getItem("token");
-  const currentUser = localStorage.getItem("username");
+  //   const user = localStorage.getItem("username");
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
     useHomeFetch();
 
@@ -25,11 +26,6 @@ export default function Home() {
     fetchLikes();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(posts);
-  //   console.log(users);
-  // }, [posts, users]);
-
   return (
     posts &&
     users && (
@@ -38,10 +34,11 @@ export default function Home() {
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar mb={0} />
           {users
-            .filter((user) => user.username === currentUser)
+            .filter((user) => user.username === params.name)
             .map((user) => {
               return <Profile key={user.username} profileUser={user} />;
             })}
+
           <Rightsection />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
         </div>

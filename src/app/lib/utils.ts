@@ -43,3 +43,22 @@ export function convertTime(isoString: string): string {
   }
   return `${days}d`;
 }
+
+export function formatTimeMonthYear(isoString: string): string {
+  const date = new Date(isoString);
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${months[date.getMonth()]} ${date.getFullYear()}`;
+}
