@@ -38,10 +38,7 @@ export function Tweet({ post }: { post: Post }) {
   }
 
   return (
-    <Link
-      href={post.ifreply ? `/posts/${post.ifreply}` : `/posts/${post.post_id}`}
-      className="flex flex-col"
-    >
+    <div className="flex flex-col">
       {post.ifretweet && (
         <div className="flex items-center gap-2 px-4 pt-3 text-gray-500 text-sm">
           <svg
@@ -62,14 +59,30 @@ export function Tweet({ post }: { post: Post }) {
       )}
 
       <div className="border-gray-600 border-b p-4 flex gap-2 hover:bg-gray-600/50">
-        <div className="w-10 h-10 bg-white rounded-full flex-shrink-0" />
+        <Link
+          href={`/profile/${post.username}`}
+          className="w-10 h-10 bg-white rounded-full flex-shrink-0"
+        />
+
         <div className="flex flex-col min-w-0 w-full">
           <div className="flex justify-between items-start w-full">
-            <div className="flex gap-3 items-center flex-wrap">
-              <p className="font-bold truncate">{"Placeholder"}</p>
-              <p className="text-gray-400 truncate">{"@" + post.username}</p>
-              <p className="text-gray-400 text-sm">{convertTime(post.date)}</p>
-            </div>
+            <Link
+              href={
+                post.ifreply
+                  ? `/posts/${post.ifreply}`
+                  : `/posts/${post.post_id}`
+              }
+              className="flex flex-1"
+            >
+              <div className="flex gap-3 items-center flex-wrap">
+                <p className="font-bold truncate">{"Placeholder"}</p>
+                <p className="text-gray-400 truncate">{"@" + post.username}</p>
+                <p className="text-gray-400 text-sm">
+                  {convertTime(post.date)}
+                </p>
+              </div>
+            </Link>
+
             <button
               onClick={() => deleteTweet(post.post_id)}
               className={`${
@@ -90,7 +103,14 @@ export function Tweet({ post }: { post: Post }) {
             </button>
           </div>
 
-          <p className="break-words">{post.content}</p>
+          <Link
+            href={
+              post.ifreply ? `/posts/${post.ifreply}` : `/posts/${post.post_id}`
+            }
+            className="block"
+          >
+            <p className="break-words">{post.content}</p>
+          </Link>
 
           <div className="flex justify-between mt-3 max-w-[425px] text-gray-500">
             <div
@@ -116,8 +136,7 @@ export function Tweet({ post }: { post: Post }) {
             <div
               className={`flex items-center group ${
                 post.ifreply ? "hidden" : ""
-              }
-              ${post.ifretweet ? "text-green-500" : ""}`}
+              } ${post.ifretweet ? "text-green-500" : ""}`}
             >
               <button className="p-2 hover:bg-green-500/10 rounded-full group-hover:text-green-500">
                 <svg
@@ -170,6 +189,6 @@ export function Tweet({ post }: { post: Post }) {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

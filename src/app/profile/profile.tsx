@@ -5,14 +5,98 @@ import { Profiletopmenu } from "./profiletopmenu";
 import { Tweet } from "../lib/tweet";
 import { User } from "../lib/definitions";
 import { formatTimeMonthYear } from "../lib/utils";
+import { useState } from "react";
 
 interface ProfileProps {
   profileUser: User;
 }
 
 export function Profile({ profileUser }: ProfileProps) {
-  const { posts, users, follows } = useAppState();
+  const { posts, users, follows, updateCounter, setUpdateCounter } =
+    useAppState();
+  const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
+  const [editActive, setEditActive] = useState(false);
+  const [location, setLocation] = useState(profileUser.location || "Unknown");
+  const [aboutme, setAboutme] = useState(profileUser.aboutme || "");
+  const [displayname, setDisplayname] = useState(profileUser.displayname);
+
+  function toggleFollow(e) {
+    const name = e.target.getAttribute("username");
+    try {
+      fetch(
+        "https://x-clone-backend-production-15d8.up.railway.app/api/follow/" +
+          name,
+        {
+          mode: "cors",
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        }
+      )
+        .then((response) => response.text())
+        .then((response) => {
+          if (response === "User followed" || "User unfollowed") {
+            setUpdateCounter(updateCounter + 1);
+          } else {
+            throw new Error(response);
+          }
+        })
+        .catch((error) => console.error(error));
+    } catch (error) {
+      console.error("Fetch error:", error);
+      console.log(["An error occurred during follow/unfollow fetch"]);
+    }
+  }
+
+  function editProfile() {
+    if (editActive) {
+      try {
+        fetch(
+          "https://x-clone-backend-production-15d8.up.railway.app/api/user",
+          {
+            mode: "cors",
+            method: "PUT",
+            body: JSON.stringify({
+              location: location,
+              aboutme: aboutme,
+              displayname: displayname,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              authorization: "Bearer " + (token ? token.toString() : ""),
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.username) {
+              setEditActive(false);
+            } else {
+              throw new Error(response);
+            }
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        console.error("Fetch error:", error);
+        console.log(["An error occurred during profile update fetch"]);
+      }
+    } else {
+      setEditActive(true);
+    }
+  }
+
+  function handleDisplayname(e) {
+    setDisplayname(e.target.value);
+  }
+  function handleAboutme(e) {
+    setAboutme(e.target.value);
+  }
+  function handleLocation(e) {
+    setLocation(e.target.value);
+  }
+
   return (
     <main className="w-full md:w-[600px] pb-16 md:pb-0">
       <div className="relative">
@@ -25,17 +109,73 @@ export function Profile({ profileUser }: ProfileProps) {
       <div className="pt-20 px-4">
         <div className="flex justify-end">
           <button
-            className={`border border-gray-600 px-4 py-1.5 rounded-full font-bold hover:bg-gray-900 ${
+            onClick={editProfile}
+            className={`${
               user === profileUser.username ? "" : "hidden"
-            }`}
+            } border border-gray-600 px-4 py-1.5 mb-2 rounded-full font-bold hover:bg-gray-900`}
           >
-            Edit profile
+            {editActive ? "Save Profile" : "Edit profile"}
           </button>
+          <div className="group">
+            <button
+              onClick={toggleFollow}
+              username={profileUser.username}
+              className={`${user === profileUser.username ? "hidden" : ""} 
+      border px-4 py-1.5 mb-2 rounded-full font-bold min-w-[100px] transition-colors
+      ${
+        follows.notifications.filter(
+          (ele) =>
+            ele.follower === user && ele.following === profileUser.username
+        ).length === 0
+          ? "bg-white text-black hover:bg-gray-200"
+          : "bg-transparent text-white border-gray-600 group-hover:border-red-500 group-hover:bg-red-500/10"
+      }`}
+            >
+              {follows.notifications.filter(
+                (ele) =>
+                  ele.follower === user &&
+                  ele.following === profileUser.username
+              ).length === 0 ? (
+                "Follow"
+              ) : (
+                <>
+                  <span className="group-hover:hidden">Following</span>
+                  <span className="hidden group-hover:inline text-red-500">
+                    Unfollow
+                  </span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
+
         <div className="mb-4">
-          <h2 className="text-xl font-bold">{profileUser.displayname}</h2>
+          {editActive ? (
+            <textarea
+              name="displayname"
+              defaultValue={displayname}
+              onChange={handleDisplayname}
+              className="w-full bg-gray-800 text-l font-bold p-2 rounded border border-gray-700"
+              rows={1}
+            />
+          ) : (
+            <h2 className="text-xl font-bold">{displayname}</h2>
+          )}
+
           <p className="text-gray-500">{"@" + profileUser.username}</p>
-          <p className="mt-3">{profileUser.aboutme}</p>
+
+          {editActive ? (
+            <textarea
+              name="aboutme"
+              defaultValue={aboutme}
+              onChange={handleAboutme}
+              className="w-full bg-gray-800 mt-3 p-2 rounded border border-gray-700"
+              rows={2}
+            />
+          ) : (
+            <p className="mt-3">{aboutme}</p>
+          )}
+
           <div className="mt-3 text-gray-400">
             <div className="flex gap-2 items-center mb-2">
               <svg
@@ -48,9 +188,17 @@ export function Profile({ profileUser }: ProfileProps) {
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>
-                {profileUser.location ? profileUser.location : "Unknown"}
-              </span>
+              {editActive ? (
+                <textarea
+                  name="location"
+                  defaultValue={location}
+                  onChange={handleLocation}
+                  className="bg-gray-800 p-2 rounded border border-gray-700"
+                  rows={1}
+                />
+              ) : (
+                <span>{location}</span>
+              )}
             </div>
 
             <div className="flex gap-2 items-center">
@@ -93,3 +241,27 @@ export function Profile({ profileUser }: ProfileProps) {
     </main>
   );
 }
+
+/* 
+old button just in case
+<button
+            onClick={toggleFollow}
+            username={profileUser.username}
+            className={`${user === profileUser.username ? "hidden" : ""} ${
+              follows.notifications.filter(
+                (ele) =>
+                  ele.follower === user &&
+                  ele.following === profileUser.username
+              ).length === 0
+                ? "hover:bg-gray-900"
+                : "hover:bg-red-500"
+            } border border-gray-600 px-4 py-1.5 mb-2 rounded-full font-bold`}
+          >
+            {follows.notifications.filter(
+              (ele) =>
+                ele.follower === user && ele.following === profileUser.username
+            ).length === 0
+              ? "Follow"
+              : "Unfollow"}
+          </button>
+*/

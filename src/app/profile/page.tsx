@@ -10,8 +10,8 @@ import { Profile } from "./profile";
 import { Rightsection } from "../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users, messages, follows, likes } = useAppState();
-
+  const { logout, posts, users, messages, follows, likes, updateCounter } =
+    useAppState();
   const token = localStorage.getItem("token");
   const currentUser = localStorage.getItem("username");
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
@@ -23,7 +23,7 @@ export default function Home() {
     fetchMessages();
     fetchFollows();
     fetchLikes();
-  }, []);
+  }, [updateCounter]);
 
   // useEffect(() => {
   //   console.log(posts);

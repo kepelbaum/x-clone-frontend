@@ -9,7 +9,15 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import local from "next/font/local";
-import { User, Post, Message, Follow, Like } from "./definitions";
+import {
+  User,
+  Post,
+  Message,
+  Follow,
+  Like,
+  FollowData,
+  LikeData,
+} from "./definitions";
 
 type AppContextType = {
   posts: Post[];
@@ -18,10 +26,10 @@ type AppContextType = {
   setUsers: (users: User[]) => void;
   messages: Message[];
   setMessages: (messages: Message[]) => void;
-  follows: Follow[];
-  setFollows: (follows: Follow[]) => void;
-  likes: Like[];
-  setLikes: (likes: Like[]) => void;
+  follows: FollowData;
+  setFollows: (follows: FollowData) => void;
+  likes: LikeData;
+  setLikes: (likes: LikeData) => void;
   user: string;
   setUser: (user: string) => void;
   token: string;
@@ -63,8 +71,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [follows, setFollows] = useState<Follow[]>([]);
-  const [likes, setLikes] = useState<Like[]>([]);
+  const [likes, setLikes] = useState<LikeData>({
+    likeCounts: {},
+    notifications: [],
+  });
+
+  const [follows, setFollows] = useState<FollowData>({
+    followerCounts: {},
+    followingCounts: {},
+    notifications: [],
+  });
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [errors, setErrors] = useState<string[]>([]);

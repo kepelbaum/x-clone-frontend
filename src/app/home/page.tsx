@@ -12,16 +12,20 @@ import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
 
 export default function Home() {
-  const { logout, posts, users, updateCounter, active, setActive } =
+  const { logout, posts, users, updateCounter, active, setActive, follows } =
     useAppState();
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
-  const { fetchPosts, fetchUsers } = useHomeFetch();
+  const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
+    useHomeFetch();
 
   useEffect(() => {
     fetchPosts();
     fetchUsers();
+    fetchFollows();
+    fetchLikes();
+    fetchMessages();
     setActive("foryou");
   }, [updateCounter]);
 
@@ -40,15 +44,28 @@ export default function Home() {
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <TopHomeMenu />
             <Messagebox />
-
-            {posts
-              .filter((post) => !post.ifreply)
-              .sort((a, b) => {
-                return a.post_id > b.post_id ? -1 : 1;
-              })
-              .map((post) => (
-                <Tweet key={post.post_id} post={post} />
-              ))}
+            {active === "foryou" &&
+              posts
+                .filter((post) => !post.ifreply)
+                .sort((a, b) => {
+                  return a.post_id > b.post_id ? -1 : 1;
+                })
+                .map((post) => <Tweet key={post.post_id} post={post} />)}
+            {active === "following" &&
+              posts
+                .filter(
+                  (post) =>
+                    !post.ifreply &&
+                    follows.notifications.some(
+                      (notification) =>
+                        notification.follower === user &&
+                        notification.following === post.username
+                    )
+                )
+                .sort((a, b) => {
+                  return a.post_id > b.post_id ? -1 : 1;
+                })
+                .map((post) => <Tweet key={post.post_id} post={post} />)}
           </main>
           <Rightsection />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>

@@ -11,7 +11,7 @@ import { Profile } from "./../profile";
 import { Rightsection } from "../../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users } = useAppState();
+  const { logout, posts, users, updateCounter } = useAppState();
   const params = useParams();
   const token = localStorage.getItem("token");
   //   const user = localStorage.getItem("username");
@@ -24,7 +24,7 @@ export default function Home() {
     fetchMessages();
     fetchFollows();
     fetchLikes();
-  }, []);
+  }, [updateCounter]);
 
   return (
     posts &&
@@ -39,7 +39,7 @@ export default function Home() {
               return <Profile key={user.username} profileUser={user} />;
             })}
 
-          <Rightsection />
+          <Rightsection profUsername={params.name} />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
         </div>
       </div>

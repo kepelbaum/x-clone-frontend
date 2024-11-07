@@ -43,3 +43,14 @@ export type Like = {
   id: number;
   date: Date;
 };
+
+export type FollowData = {
+  followerCounts: Record<string, number>;
+  followingCounts: Record<string, number>;
+  notifications: Follow[];
+};
+
+export type LikeData = {
+  likeCounts: Record<number, number>;
+  notifications: Like[];
+};
