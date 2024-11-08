@@ -12,8 +12,15 @@ interface ProfileProps {
 }
 
 export function Profile({ profileUser }: ProfileProps) {
-  const { posts, users, follows, updateCounter, setUpdateCounter } =
-    useAppState();
+  const {
+    posts,
+    users,
+    follows,
+    updateCounter,
+    setUpdateCounter,
+    active,
+    likes,
+  } = useAppState();
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
   const [editActive, setEditActive] = useState(false);
@@ -233,11 +240,45 @@ export function Profile({ profileUser }: ProfileProps) {
             </div>
           </div>
         </div>
-        <Profiletopmenu />
+        <Profiletopmenu hide={profileUser.username !== user} />
       </div>
-      {posts.map((post) => (
-        <Tweet key={post.post_id} post={post} />
-      ))}
+      {active === "posts" &&
+        posts
+          .filter(
+            (post) => post.username === profileUser.username && !post.ifreply
+          )
+          .map((post) => <Tweet key={post.post_id} post={post} />)}
+      {active === "replies" &&
+        posts
+          .filter(
+            (post) => post.username === profileUser.username && post.ifreply
+          )
+          .map((post) => <Tweet key={post.post_id} post={post} />)}
+      {active === "likes" &&
+        posts
+          .filter((post) =>
+            likes.notifications.find(
+              (like) =>
+                like.username === profileUser.username &&
+                like.post_id === post.post_id
+            )
+          )
+          .sort((a, b) => {
+            const likeA = likes.notifications.find(
+              (like) =>
+                like.post_id === a.post_id &&
+                like.username === profileUser.username
+            );
+            const likeB = likes.notifications.find(
+              (like) =>
+                like.post_id === b.post_id &&
+                like.username === profileUser.username
+            );
+            return (
+              new Date(likeB!.date).getTime() - new Date(likeA!.date).getTime()
+            );
+          })
+          .map((post) => <Tweet key={post.post_id} post={post} />)}
     </main>
   );
 }

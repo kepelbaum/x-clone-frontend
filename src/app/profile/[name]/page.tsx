@@ -11,7 +11,8 @@ import { Profile } from "./../profile";
 import { Rightsection } from "../../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users, updateCounter } = useAppState();
+  const { logout, posts, users, updateCounter, active, setActive } =
+    useAppState();
   const params = useParams();
   const token = localStorage.getItem("token");
   //   const user = localStorage.getItem("username");
@@ -24,6 +25,7 @@ export default function Home() {
     fetchMessages();
     fetchFollows();
     fetchLikes();
+    setActive("posts");
   }, [updateCounter]);
 
   return (
