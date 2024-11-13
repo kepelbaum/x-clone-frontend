@@ -12,9 +12,9 @@ export function Whatshappening() {
         </div>
       ))}
 
-      <button className="w-full p-4 text-blue-500 hover:bg-gray-800 text-left rounded-b-2xl">
+      {/* <button className="w-full p-4 text-blue-500 hover:bg-gray-800 text-left rounded-b-2xl">
         Show more
-      </button>
+      </button> */}
     </div>
   );
 }

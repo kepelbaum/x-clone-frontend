@@ -17,33 +17,47 @@ export default function Home() {
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
+  const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
 
   useEffect(() => {
     fetchPosts();
     fetchUsers();
+    fetchMessages();
     fetchFollows();
     fetchLikes();
-    fetchMessages();
     setActive("foryou");
+  }, []);
+
+  useEffect(() => {
+    if (updateCounter > 0) {
+      setLocalUpdateCounter((prev) => prev + 1);
+    }
   }, [updateCounter]);
 
-  // useEffect(() => {
-  //   console.log(posts);
-  //   console.log(users);
-  // }, [posts, users]);
+  useEffect(() => {
+    if (localUpdateCounter > 0) {
+      fetchPosts();
+      fetchUsers();
+      fetchMessages();
+      fetchFollows();
+      fetchLikes();
+    }
+  }, [localUpdateCounter]);
 
   return (
     posts &&
     users && (
-      <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
-        <div className="w-full flex relative">
+      <div className="bg-black text-white min-h-screen fixed inset-0 overflow-y-auto overflow-x-hidden">
+        <div className="w-full max-w-[100vw] flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar mb={10} />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <TopHomeMenu />
-            <Messagebox />
+            <Messagebox
+              avatar={users.filter((u) => u.username === user)[0]?.avatar}
+            />
             {active === "foryou" &&
               posts
                 .filter((post) => !post.ifreply)

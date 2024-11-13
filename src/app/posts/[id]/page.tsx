@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAppState } from "@/app/lib/context";
 import { useHomeFetch } from "@/app/lib/fetch";
 import { Navbar } from "@/app/navbar";
@@ -13,35 +13,83 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export default function Home() {
+  const targetRef = useRef<HTMLDivElement>(null);
   const { logout, posts, users, updateCounter, active, setActive } =
     useAppState();
+  const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const params = useParams();
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
-  const { fetchPosts, fetchUsers } = useHomeFetch();
+  const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
+    useHomeFetch();
 
   useEffect(() => {
     fetchPosts();
     fetchUsers();
+    fetchMessages();
+    fetchFollows();
+    fetchLikes();
     setActive("foryou");
+  }, []);
+
+  useEffect(() => {
+    if (updateCounter > 0) {
+      setLocalUpdateCounter((prev) => prev + 1);
+    }
   }, [updateCounter]);
 
-  // useEffect(() => {
-  //   console.log(posts);
-  //   console.log(users);
-  // }, [posts, users]);
+  useEffect(() => {
+    if (localUpdateCounter > 0) {
+      fetchPosts();
+      fetchUsers();
+      fetchMessages();
+      fetchFollows();
+      fetchLikes();
+    }
+  }, [localUpdateCounter]);
+
+  useEffect(() => {
+    if (posts && params.id) {
+      setTimeout(() => {
+        targetRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
+    }
+  }, [posts, params.id]);
+
+  const getParentChain = () => {
+    const parentChain = [];
+    let currentPost = posts.find((p) => p.post_id.toString() === params.id);
+
+    while (currentPost?.ifreply) {
+      const parentPost = posts.find((p) => p.post_id === currentPost?.ifreply);
+      if (parentPost) {
+        parentChain.unshift(parentPost);
+        currentPost = parentPost;
+      } else {
+        break;
+      }
+    }
+
+    return parentChain;
+  };
 
   return (
     posts &&
     users && (
-      <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
+      <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar mb={10} />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <div className="sticky top-0 bg-black z-10">
               <div className="flex items-center gap-6 px-4 py-3">
-                <Link href="/" className="p-2 hover:bg-gray-800 rounded-full">
+                <Link
+                  href="/home"
+                  className="p-2 hover:bg-gray-800 rounded-full"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -56,13 +104,23 @@ export default function Home() {
                 <span className="text-xl font-bold">Post</span>
               </div>
             </div>
+
+            {getParentChain().map((post) => (
+              <Tweet key={post.post_id} post={post} />
+            ))}
             {posts
-              .filter((post) => !post.ifreply)
               .filter((post) => post.post_id.toString() === params.id)
               .map((post) => (
-                <Tweet key={post.post_id} post={post} />
+                <div ref={targetRef} key={post.post_id}>
+                  <Tweet post={post} />
+                </div>
               ))}
-            <Messagebox id={Number(params.id)} />
+
+            <Messagebox
+              id={Number(params.id)}
+              avatar={users.filter((u) => u.username === user)[0]?.avatar}
+            />
+
             {posts
               .filter(
                 (post) => post.ifreply && post.ifreply.toString() === params.id

@@ -11,6 +11,14 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
     {}
   );
   const [recommendedUsers, setRecommendedUsers] = useState<Array<any>>([]);
+  const DEFAULT_AVATAR =
+    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
+
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    e.currentTarget.src = DEFAULT_AVATAR;
+  };
 
   useEffect(() => {
     if (users?.length && follows?.notifications?.length) {
@@ -80,25 +88,35 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
           key={ele.username}
           className="px-2 py-3 hover:bg-gray-800 flex items-center justify-between"
         >
-          <div className="flex items-center gap-3">
-            <Link
-              href={`/profile/${ele.username}`}
-              className="w-10 h-10 bg-white rounded-full"
-            />
-            <div>
-              <p className="font-bold">{ele.displayname}</p>
-              <p className="text-gray-500">@{ele.username}</p>
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex-shrink-0">
+              <Link href={`/profile/${ele.username}`}>
+                <img
+                  src={ele.avatar || DEFAULT_AVATAR}
+                  onError={handleImageError}
+                  alt={`${ele.username}'s avatar`}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </Link>
+            </div>
+            <div className="min-w-0 flex-shrink">
+              <p className="font-bold truncate max-w-[120px]">
+                {ele.displayname}
+              </p>
+              <p className="text-gray-500 truncate max-w-[120px]">
+                @{ele.username}
+              </p>
             </div>
           </div>
-          <div className="group">
+          <div className="group flex-shrink-0">
             <button
               onClick={() => toggleFollow(ele.username)}
               className={`border px-2 py-1.5 rounded-full font-bold min-w-[100px] transition-colors
-      ${
-        !followStatus[ele.username]
-          ? "bg-white text-black hover:bg-gray-200"
-          : "bg-transparent text-white border-gray-600 group-hover:border-red-500 group-hover:bg-red-500/10"
-      }`}
+            ${
+              !followStatus[ele.username]
+                ? "bg-white text-black hover:bg-gray-200"
+                : "bg-transparent text-white border-gray-600 group-hover:border-red-500 group-hover:bg-red-500/10"
+            }`}
             >
               {!followStatus[ele.username] ? (
                 "Follow"
@@ -115,11 +133,11 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
         </div>
       ))}
 
-      {recommendedUsers.length === 3 && (
+      {/* {recommendedUsers.length === 3 && (
         <button className="w-full p-4 text-blue-500 hover:bg-gray-800 text-left rounded-b-2xl">
           Show more
         </button>
-      )}
+      )} */}
     </div>
   );
 }

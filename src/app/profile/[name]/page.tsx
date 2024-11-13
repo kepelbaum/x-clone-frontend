@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppState } from "../../lib/context";
 import { useHomeFetch } from "../../lib/fetch";
 import { Navbar } from "../../navbar";
@@ -13,9 +13,9 @@ import { Rightsection } from "../../lib/rightsection";
 export default function Home() {
   const { logout, posts, users, updateCounter, active, setActive } =
     useAppState();
+  const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const params = useParams();
   const token = localStorage.getItem("token");
-  //   const user = localStorage.getItem("username");
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
     useHomeFetch();
 
@@ -26,12 +26,28 @@ export default function Home() {
     fetchFollows();
     fetchLikes();
     setActive("posts");
+  }, []);
+
+  useEffect(() => {
+    if (updateCounter > 0) {
+      setLocalUpdateCounter((prev) => prev + 1);
+    }
   }, [updateCounter]);
+
+  useEffect(() => {
+    if (localUpdateCounter > 0) {
+      fetchPosts();
+      fetchUsers();
+      fetchMessages();
+      fetchFollows();
+      fetchLikes();
+    }
+  }, [localUpdateCounter]);
 
   return (
     posts &&
     users && (
-      <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
+      <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar mb={0} />

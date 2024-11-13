@@ -1,6 +1,18 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 export function Searchbar() {
+  const [searchState, setSearchState] = useState("");
+  const router = useRouter();
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchState.trim()) {
+      router.push(`/explore?key=${searchState.trim()}`);
+    }
+  };
+
   return (
     <div className="sticky top-0 pt-2 bg-black z-10">
       <div className="relative">
@@ -18,6 +30,9 @@ export function Searchbar() {
         <input
           type="text"
           placeholder="Search"
+          value={searchState}
+          onChange={(e) => setSearchState(e.target.value)}
+          onKeyDown={handleKeyPress}
           className="w-full bg-gray-900 rounded-full py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>

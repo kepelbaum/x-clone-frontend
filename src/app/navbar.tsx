@@ -60,7 +60,10 @@ export function Navbar({ mb }: { mb: number }) {
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Explore</p>
       </div> */}
-      <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
+      <Link
+        href="/notifications"
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -77,7 +80,7 @@ export function Navbar({ mb }: { mb: number }) {
           <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Notifications</p>
-      </div>
+      </Link>
 
       <Link
         href="/messages"
