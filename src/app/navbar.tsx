@@ -42,7 +42,10 @@ export function Navbar({ mb }: { mb: number }) {
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Home</p>
       </Link>
-      {/* <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
+      <Link
+        href="/explore"
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -59,7 +62,7 @@ export function Navbar({ mb }: { mb: number }) {
           <path d="m21 21-4.3-4.3" />
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Explore</p>
-      </div> */}
+      </Link>
       <Link
         href="/notifications"
         className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
@@ -126,7 +129,10 @@ export function Navbar({ mb }: { mb: number }) {
         <p className="font-semibold text-xl hidden xl:block">Profile</p>
       </Link>
 
-      <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
+      <Link
+        href="/settings"
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -143,7 +149,7 @@ export function Navbar({ mb }: { mb: number }) {
           <circle cx="12" cy="12" r="3" />
         </svg>
         <p className="font-semibold text-xl hidden xl:block">Settings</p>
-      </div>
+      </Link>
 
       <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
         <svg

@@ -125,7 +125,8 @@ export function Tweet({ post }: { post: Post }) {
     posts &&
     users &&
     follows &&
-    likes && (
+    likes &&
+    post && (
       <Twemoji>
         <div
           onClick={() =>
@@ -424,9 +425,11 @@ export function Tweet({ post }: { post: Post }) {
                       </svg>
                     </button>
                     <span className="text-sm group-hover:text-pink-500">
-                      {likes.likeCounts[
-                        referencePost?.post_id || post.post_id
-                      ] || 0}
+                      {likes.likeCounts
+                        ? likes.likeCounts[
+                            referencePost?.post_id || post.post_id
+                          ]
+                        : 0}
                     </span>
                   </div>
 

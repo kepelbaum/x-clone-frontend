@@ -37,15 +37,21 @@ export default function Home() {
       <div className="md:flex md:flex-col flex flex-col md:flex-row justify-center items-center gap-10">
         <p className="text-4xl font-bold">Create Account</p>
         <div className="flex flex-col">
-          {errors.map((error, index) => (
-            <p
-              key={index}
-              className="text-2xl text-red-500 font-bold text-white"
-            >
-              {error}
-              {"\n"}
+          {typeof errors === "string" ? (
+            <p className="text-2xl text-red-500 font-bold text-white">
+              {errors}
             </p>
-          ))}
+          ) : (
+            Object.values(errors).map((error, index) => (
+              <p
+                key={index}
+                className="text-2xl text-red-500 font-bold text-white"
+              >
+                {error}
+                <br />
+              </p>
+            ))
+          )}
         </div>
         <div className="flex flex-col gap-5">
           <input

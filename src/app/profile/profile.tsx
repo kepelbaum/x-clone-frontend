@@ -81,6 +81,7 @@ export function Profile({ profileUser }: ProfileProps) {
 
   function toggleFollow(e) {
     const name = e.target.getAttribute("username");
+    if (!name) return null;
     try {
       fetch(
         "https://x-clone-backend-production-15d8.up.railway.app/api/follow/" +
@@ -323,7 +324,7 @@ export function Profile({ profileUser }: ProfileProps) {
                   name="location"
                   defaultValue={location}
                   onChange={handleLocation}
-                  className="bg-gray-800 p-2 rounded border border-gray-700"
+                  className="bg-gray-800 p-2 rounded border border-gray-700 text-white"
                   rows={1}
                 />
               ) : (

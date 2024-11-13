@@ -92,42 +92,39 @@ export function useAuth() {
       setErrors(["An error occurred during login"]);
     }
   };
-
   const register = async (name: string, pass: string, conf: string) => {
     if (pass == null || pass != conf) {
       setErrors(["Passwords do not match"]);
-    } else {
-      try {
-        const response = await fetch(
-          "https://x-clone-backend-production-15d8.up.railway.app/api/auth/register",
-          {
-            mode: "cors",
-            method: "POST",
-            body: JSON.stringify({
-              username: name,
-              password: pass,
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          }
-        );
+      return;
+    }
 
-        const data = await response.json();
-        console.log("Response:", data);
+    console.log(name, pass);
 
-        if (data.errors) {
-          setErrors(data.errors);
-          console.log(errors);
-        } else {
-          setErrors([]);
-          loginSubmit(name, pass);
-          // router.push("/home");
+    try {
+      const response = await fetch(
+        "https://x-clone-backend-production-15d8.up.railway.app/api/auth/register",
+        {
+          mode: "cors",
+          method: "POST",
+          body: JSON.stringify({
+            username: name,
+            password: pass,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
         }
-      } catch (error) {
-        console.error("Login error:", error);
-        setErrors(["An error occurred during login"]);
+      );
+
+      const data = await response.json();
+
+      if (data.errors) {
+        setErrors(data.errors);
+      } else {
+        loginSubmit(name, pass);
       }
+    } catch (error) {
+      setErrors(["An error occurred during registration"]);
     }
   };
 
