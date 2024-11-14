@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppState } from "../../lib/context";
@@ -11,11 +9,10 @@ import { Profile } from "./../profile";
 import { Rightsection } from "../../lib/rightsection";
 
 export default function Home() {
-  const { logout, posts, users, updateCounter, active, setActive } =
-    useAppState();
+  const { posts, users, updateCounter, setActive } = useAppState();
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const params = useParams();
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
     useHomeFetch();
 
@@ -26,6 +23,7 @@ export default function Home() {
     fetchFollows();
     fetchLikes();
     setActive("posts");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -41,7 +39,7 @@ export default function Home() {
       fetchMessages();
       fetchFollows();
       fetchLikes();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUpdateCounter]);
 
   return (
@@ -50,7 +48,7 @@ export default function Home() {
       <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar mb={0} />
+          <Navbar />
           {users
             .filter((user) => user.username === params.name)
             .map((user) => {

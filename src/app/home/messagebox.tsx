@@ -6,6 +6,7 @@ import EmojiPicker from "emoji-picker-react";
 import GiphyPicker from "./giphypicker";
 import { Image as LucideImage, Smile, X } from "lucide-react";
 import Image from "next/image";
+import { EmojiClickData } from "emoji-picker-react";
 
 interface OptionalId {
   id?: number;
@@ -92,7 +93,7 @@ export function Messagebox({ id, avatar }: OptionalId) {
     }
   };
 
-  const handleEmojiClick = (emojiObject: any) => {
+  const handleEmojiClick = (emojiObject: EmojiClickData) => {
     setContent((prevContent) => prevContent + emojiObject.emoji);
     setShowEmojiPicker(false);
   };

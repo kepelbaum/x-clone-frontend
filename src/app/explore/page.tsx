@@ -48,8 +48,7 @@ export default function Explore() {
       fetchMessages();
       fetchFollows();
       fetchLikes();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUpdateCounter]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
