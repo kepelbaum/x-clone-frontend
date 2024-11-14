@@ -62,7 +62,7 @@ export default function Explore() {
   };
 
   const filteredPosts = posts?.filter((post) =>
-    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+    post.content?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
