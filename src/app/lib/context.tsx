@@ -79,8 +79,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setPosts([]);
     setUsers([]);
     setMessages([]);
-    setFollows([]);
-    setLikes([]);
+    setFollows({ followerCounts: {}, followingCounts: {}, notifications: [] });
+    setLikes({ likeCounts: {}, notifications: [] });
     localStorage.setItem("username", "");
     localStorage.setItem("token", "");
     router.push("/");
