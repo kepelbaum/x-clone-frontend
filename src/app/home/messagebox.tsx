@@ -4,7 +4,8 @@ import { useAppState } from "../lib/context";
 import { useState, useRef, RefObject, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import GiphyPicker from "./giphypicker";
-import { Image, Smile, X } from "lucide-react";
+import { Image as LucideImage, Smile, X } from "lucide-react";
+import Image from "next/image";
 
 interface OptionalId {
   id?: number;
@@ -152,10 +153,16 @@ export function Messagebox({ id, avatar }: OptionalId) {
   return (
     <div className="border-b border-gray-600 p-4">
       <div className="flex gap-3">
-        <img
-          src={avatar || DEFAULT_AVATAR}
-          className="w-10 h-10 rounded-full bg-white flex-shrink-0"
-        />
+        <div className="relative w-10 h-10 flex-shrink-0">
+          <Image
+            src={avatar || DEFAULT_AVATAR}
+            alt="User avatar"
+            fill
+            className="rounded-full bg-white object-cover"
+            onError={handleImageError}
+            sizes="40px"
+          />
+        </div>
         <div className="flex-grow relative">
           <textarea
             value={content}
@@ -167,11 +174,15 @@ export function Messagebox({ id, avatar }: OptionalId) {
           {previewUrl && (
             <div className="relative mt-2 mb-3">
               {selectedFile?.type.startsWith("image/") ? (
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="max-h-80 rounded-2xl w-full object-cover"
-                />
+                <div className="relative w-full aspect-video">
+                  <Image
+                    src={previewUrl}
+                    alt="Preview"
+                    fill
+                    className="rounded-2xl object-cover"
+                    sizes="(max-width: 768px) 100vw, 768px"
+                  />
+                </div>
               ) : (
                 <video
                   src={previewUrl}
@@ -201,7 +212,7 @@ export function Messagebox({ id, avatar }: OptionalId) {
                 onClick={() => fileInputRef.current?.click()}
                 className="hover:bg-blue-500/10 p-2 rounded-full"
               >
-                <Image size={20} />
+                <LucideImage size={20} />
               </button>
               <button
                 onClick={() => {

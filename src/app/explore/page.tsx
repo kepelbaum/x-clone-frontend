@@ -32,6 +32,7 @@ export default function Explore() {
     fetchMessages();
     fetchFollows();
     fetchLikes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function Explore() {
       fetchMessages();
       fetchFollows();
       fetchLikes();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [localUpdateCounter]);
 
@@ -114,7 +116,7 @@ export default function Explore() {
                     .map((post) => <Tweet key={post.post_id} post={post} />)}
               {searchQuery !== "" && filteredPosts.length === 0 && (
                 <div className="p-4 text-center text-gray-500">
-                  No posts found matching "{searchQuery}"
+                  No posts found matching {`${searchQuery}`}
                 </div>
               )}
             </div>

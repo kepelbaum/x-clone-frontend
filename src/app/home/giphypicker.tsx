@@ -7,12 +7,22 @@ import { Search } from "lucide-react";
 interface GiphyPickerProps {
   onSelect: (gif: { url: string }) => void;
   onClose: () => void;
-  className: string;
+  // className: string;
+}
+
+interface Gif {
+  id: string;
+  title: string;
+  images: {
+    fixed_height: {
+      url: string;
+    };
+  };
 }
 
 export default function GiphyPicker({ onSelect, onClose }: GiphyPickerProps) {
   const [search, setSearch] = useState("");
-  const [gifs, setGifs] = useState<any[]>([]);
+  const [gifs, setGifs] = useState<Gif[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,7 +83,7 @@ export default function GiphyPicker({ onSelect, onClose }: GiphyPickerProps) {
     searchGifs(value);
   };
 
-  const handleSelect = (gif: any) => {
+  const handleSelect = (gif: Gif) => {
     onSelect({ url: gif.images.fixed_height.url });
     onClose();
   };

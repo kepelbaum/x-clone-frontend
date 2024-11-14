@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppState } from "../lib/context";
-import { useState } from "react";
 
 export function TopHomeMenu() {
   const { active, setActive } = useAppState();

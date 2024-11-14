@@ -4,18 +4,8 @@ import { useAppState } from "./context";
 import { useRouter } from "next/navigation";
 
 export function useHomeFetch() {
-  const {
-    posts,
-    setPosts,
-    users,
-    setUsers,
-    messages,
-    setMessages,
-    follows,
-    setFollows,
-    likes,
-    setLikes,
-  } = useAppState();
+  const { setPosts, setUsers, setMessages, setFollows, setLikes } =
+    useAppState();
 
   const token = localStorage.getItem("token");
   //   const name = localStorage.getItem("username");

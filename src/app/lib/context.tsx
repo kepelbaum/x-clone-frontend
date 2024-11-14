@@ -1,23 +1,8 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  useContext,
-  createContext,
-  type ReactNode,
-} from "react";
+import { useState, useContext, createContext, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import local from "next/font/local";
-import {
-  User,
-  Post,
-  Message,
-  Follow,
-  Like,
-  FollowData,
-  LikeData,
-} from "./definitions";
+import { User, Post, Message, FollowData, LikeData } from "./definitions";
 
 type AppContextType = {
   posts: Post[];

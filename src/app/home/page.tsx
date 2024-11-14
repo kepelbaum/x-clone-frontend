@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 import { useAppState } from "../lib/context";
 import { useHomeFetch } from "../lib/fetch";
@@ -12,10 +11,10 @@ import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
 
 export default function Home() {
-  const { logout, posts, users, updateCounter, active, setActive, follows } =
+  const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
@@ -28,6 +27,7 @@ export default function Home() {
     fetchFollows();
     fetchLikes();
     setActive("foryou");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Home() {
       fetchMessages();
       fetchFollows();
       fetchLikes();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUpdateCounter]);
 
   return (

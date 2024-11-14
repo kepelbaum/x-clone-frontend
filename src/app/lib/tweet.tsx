@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "./context";
@@ -5,6 +8,7 @@ import { Post } from "./definitions";
 import { convertTime } from "./utils";
 import Link from "next/link";
 import Twemoji from "react-twemoji";
+import Image from "next/image";
 
 export function Tweet({ post }: { post: Post }) {
   const token = localStorage.getItem("token");
@@ -121,6 +125,15 @@ export function Tweet({ post }: { post: Post }) {
     }
   }
 
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   return (
     posts &&
     users &&
@@ -166,18 +179,20 @@ export function Tweet({ post }: { post: Post }) {
                 onClick={(e) => e.stopPropagation()}
                 className="flex-shrink-0 relative z-10"
               >
-                <img
-                  src={
-                    users.find(
-                      (u) =>
-                        u.username ===
-                        (referencePost?.username || post.username)
-                    )?.avatar || DEFAULT_AVATAR
-                  }
-                  onError={handleImageError}
-                  alt={`${referencePost?.username || post.username}'s avatar`}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+                <div className="relative w-10 h-10">
+                  <img
+                    src={
+                      users.find(
+                        (u) =>
+                          u.username ===
+                          (referencePost?.username || post.username)
+                      )?.avatar || DEFAULT_AVATAR
+                    }
+                    alt={`${referencePost?.username || post.username}'s avatar`}
+                    className="w-10 h-10 rounded-full object-cover"
+                    onError={handleImageError}
+                  />
+                </div>
               </Link>
 
               <div className="flex flex-col min-w-0 w-full">
@@ -245,14 +260,22 @@ export function Tweet({ post }: { post: Post }) {
                   </p>
                   {referencePost?.media_type === "image" &&
                     referencePost?.media_url && (
-                      <img
-                        src={referencePost.media_url}
-                        alt="Uploaded image"
-                        className="mt-3 rounded-2xl max-h-80 object-contain"
-                        onError={(e) =>
-                          (e.currentTarget.style.display = "none")
-                        }
-                      />
+                      <div className="relative mt-3 w-[calc(100%-48px)]  h-80">
+                        {referencePost.media_url &&
+                          isValidUrl(referencePost.media_url) && (
+                            <Image
+                              src={referencePost.media_url}
+                              alt="Uploaded image"
+                              fill
+                              className="rounded-2xl object-contain"
+                              sizes="(max-width: 768px) 100vw, 768px"
+                              onError={(e) => {
+                                const container = e.currentTarget.parentElement;
+                                if (container) container.style.display = "none";
+                              }}
+                            />
+                          )}
+                      </div>
                     )}
                   {referencePost?.media_type === "video" &&
                     referencePost?.media_url && (

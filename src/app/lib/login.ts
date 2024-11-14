@@ -4,19 +4,7 @@ import { useAppState } from "./context";
 import { useRouter } from "next/navigation";
 
 export function useAuth() {
-  const {
-    posts,
-    setPosts,
-    users,
-    setUsers,
-    user,
-    setUser,
-    token,
-    setToken,
-    logout,
-    errors,
-    setErrors,
-  } = useAppState();
+  const { setUser, setToken, errors, setErrors } = useAppState();
 
   const router = useRouter();
 
@@ -124,7 +112,7 @@ export function useAuth() {
         loginSubmit(name, pass);
       }
     } catch (error) {
-      setErrors(["An error occurred during registration"]);
+      setErrors(["An error occurred during registration: " + error]);
     }
   };
 

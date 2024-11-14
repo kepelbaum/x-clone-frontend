@@ -1,25 +1,11 @@
 "use client";
 
 import { useAppState } from "./context";
-import { useRouter } from "next/navigation";
 import { useAuth as useLogin } from "./login";
 
 export function useAuth() {
-  const {
-    posts,
-    setPosts,
-    users,
-    setUsers,
-    user,
-    setUser,
-    token,
-    setToken,
-    logout,
-    errors,
-    setErrors,
-  } = useAppState();
+  const { setErrors } = useAppState();
 
-  const router = useRouter();
   const { loginSubmit } = useLogin();
 
   const register = async (name: string, pass: string, conf: string) => {
@@ -54,7 +40,7 @@ export function useAuth() {
         loginSubmit(name, pass);
       }
     } catch (error) {
-      setErrors(["An error occurred during registration"]);
+      setErrors(["An error occurred during registration: " + error]);
     }
   };
 
