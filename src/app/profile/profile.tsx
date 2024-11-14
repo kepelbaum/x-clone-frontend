@@ -1,3 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//(or background, even though default one is not implemented right now)
+//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "../lib/context";
@@ -13,15 +17,8 @@ interface ProfileProps {
 }
 
 export function Profile({ profileUser }: ProfileProps) {
-  const {
-    posts,
-    users,
-    follows,
-    updateCounter,
-    setUpdateCounter,
-    active,
-    likes,
-  } = useAppState();
+  const { posts, follows, updateCounter, setUpdateCounter, active, likes } =
+    useAppState();
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
   const [editActive, setEditActive] = useState(false);

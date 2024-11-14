@@ -1,6 +1,18 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//in Image element in case of broken link
+
+"use client";
+
 import { useState, useEffect } from "react";
 import { useAppState } from "./context";
 import Link from "next/link";
+
+interface User {
+  username: string;
+  displayname: string;
+  avatar?: string;
+}
 
 export function Whotofollow({ profUsername }: { profUsername?: string }) {
   const { users, follows } = useAppState();
@@ -10,7 +22,7 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
   const [followStatus, setFollowStatus] = useState<{ [key: string]: boolean }>(
     {}
   );
-  const [recommendedUsers, setRecommendedUsers] = useState<Array<any>>([]);
+  const [recommendedUsers, setRecommendedUsers] = useState<Array<User>>([]);
   const DEFAULT_AVATAR =
     "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
 

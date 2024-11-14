@@ -8,7 +8,7 @@ import { Navbar } from "../navbar";
 import { Rightsection } from "../lib/rightsection";
 import { useHomeFetch } from "../lib/fetch";
 
-function NotificationItem({ type, data, users, posts }) {
+function NotificationItem({ type, data, users }) {
   const actor = users.find((u) =>
     type === "like"
       ? u.username === data.username
@@ -190,6 +190,7 @@ export default function Notifications() {
     fetchFollows();
     fetchLikes();
     fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCounter]);
 
   const allNotifications = [

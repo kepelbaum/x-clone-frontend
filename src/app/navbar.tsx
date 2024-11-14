@@ -4,7 +4,7 @@ import { useAppState } from "./lib/context";
 import Image from "next/image";
 import Link from "next/link";
 
-export function Navbar({ mb }: { mb: number }) {
+export function Navbar() {
   const { logout } = useAppState();
   return (
     <div

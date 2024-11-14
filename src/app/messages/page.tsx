@@ -1,3 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//in Image element in case of broken link
+
 "use client";
 
 import { useState, useMemo, useRef } from "react";
@@ -9,17 +13,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function MessageInterface() {
-  const {
-    logout,
-    posts,
-    users,
-    updateCounter,
-    active,
-    setActive,
-    follows,
-    messages,
-    setUpdateCounter,
-  } = useAppState();
+  const { posts, users, updateCounter, messages, setUpdateCounter } =
+    useAppState();
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -86,7 +81,7 @@ export default function MessageInterface() {
         if (!lastMessageB) return 1;
 
         return lastMessageB.date.localeCompare(lastMessageA.date);
-      });
+      }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, messages, currentUser, id]);
 
   const conversationMessages = useMemo(() => {
@@ -162,6 +157,7 @@ export default function MessageInterface() {
     fetchFollows();
     fetchLikes();
     fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCounter]);
 
   useEffect(() => {
@@ -174,7 +170,7 @@ export default function MessageInterface() {
   useEffect(() => {
     if (messages && selectedUser) {
       scrollToBottom();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, selectedUser]);
 
   if (!posts || !messages || !currentUser) return null;
@@ -185,7 +181,7 @@ export default function MessageInterface() {
       <div className="md:pl-20 bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-900px)/2)]"></div>
-          <Navbar mb={10} />
+          <Navbar />
           <main className="z-30 w-full md:w-[900px] pb-16 md:pb-0 border-x border-gray-600">
             <div className="flex h-screen">
               <div

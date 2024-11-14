@@ -8,6 +8,8 @@ const nextConfig = {
       "media2.giphy.com",
       "media3.giphy.com",
       "media4.giphy.com",
+      "cdn.midjourney.com", //for default avatar
+      "res.cloudinary.com",
     ],
   },
 };

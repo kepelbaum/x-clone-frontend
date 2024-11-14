@@ -3,7 +3,7 @@
 export function Whatshappening() {
   return (
     <div className="bg-gray-900 rounded-2xl">
-      <h2 className="text-xl font-bold p-4">What's happening</h2>
+      <h2 className="text-xl font-bold p-4">{"What's happening"}</h2>
       {[1, 2, 3].map((item) => (
         <div key={item} className="px-4 py-3 hover:bg-gray-800 cursor-pointer">
           <p className="text-sm text-gray-500">Trending Hashtag #{item}</p>

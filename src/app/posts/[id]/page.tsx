@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { useAppState } from "@/app/lib/context";
 import { useHomeFetch } from "@/app/lib/fetch";
 import { Navbar } from "@/app/navbar";
-import { TopHomeMenu } from "@/app/home/tophomemenu";
+// import { TopHomeMenu } from "@/app/home/tophomemenu";
 import { Messagebox } from "@/app/home/messagebox";
 import { Tweet } from "@/app/lib/tweet";
 import { Rightsection } from "@/app/lib/rightsection";
@@ -14,11 +14,10 @@ import { useState } from "react";
 
 export default function Home() {
   const targetRef = useRef<HTMLDivElement>(null);
-  const { logout, posts, users, updateCounter, active, setActive } =
-    useAppState();
+  const { posts, users, updateCounter, setActive } = useAppState();
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const params = useParams();
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
@@ -30,6 +29,7 @@ export default function Home() {
     fetchFollows();
     fetchLikes();
     setActive("foryou");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Home() {
       fetchMessages();
       fetchFollows();
       fetchLikes();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUpdateCounter]);
 
   useEffect(() => {

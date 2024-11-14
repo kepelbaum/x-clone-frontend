@@ -10,7 +10,6 @@ export default function Settings() {
   const [errorColor, setErrorColor] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const user = localStorage.getItem("username");
   const token = localStorage.getItem("token");
 
   const handlePasswordChange = async () => {
@@ -59,7 +58,7 @@ export default function Settings() {
     <div className="bg-black text-white min-h-screen fixed inset-0 overflow-y-auto overflow-x-hidden">
       <div className="w-full max-w-[100vw] flex relative">
         <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-        <Navbar mb={10} />
+        <Navbar />
         <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
           <div className="p-4">
             <h1 className="text-2xl font-bold mb-6">Settings</h1>

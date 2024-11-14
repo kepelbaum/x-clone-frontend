@@ -73,7 +73,7 @@ export default function Explore() {
       <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar mb={0} />
+          <Navbar />
 
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-x border-gray-600">
             <div className="sticky top-0 z-10 bg-black/80">

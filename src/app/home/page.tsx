@@ -52,7 +52,7 @@ export default function Home() {
       <div className="bg-black text-white min-h-screen fixed inset-0 overflow-y-auto overflow-x-hidden">
         <div className="w-full max-w-[100vw] flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar mb={10} />
+          <Navbar />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <TopHomeMenu />
             <Messagebox
