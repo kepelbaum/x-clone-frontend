@@ -38,16 +38,18 @@ export type Follow = {
   date: Date;
 };
 
-export type Like = {
-  username: string;
-  id: number;
-  date: Date;
-};
-
 export type FollowData = {
   followerCounts: Record<string, number>;
   followingCounts: Record<string, number>;
   notifications: Follow[];
+};
+
+export type Like = {
+  username: string;
+  id: number;
+  date: Date;
+  post_id: number;
+  poster: string;
 };
 
 export type LikeData = {

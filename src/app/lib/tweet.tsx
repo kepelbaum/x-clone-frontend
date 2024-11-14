@@ -168,7 +168,7 @@ export function Tweet({ post }: { post: Post }) {
                 <span>
                   {users.filter((ele) => ele.username === post.username)[0]
                     ?.displayname + " "}{" "}
-                  Retweeted {" (" + convertTime(post.date) + ")"}
+                  Retweeted {" (" + convertTime(post.date.toString()) + ")"}
                 </span>
               </div>
             )}
@@ -210,7 +210,9 @@ export function Tweet({ post }: { post: Post }) {
                         @{referencePost?.username}
                       </p>
                       <p className="text-gray-400 text-sm">
-                        {convertTime(referencePost?.date || post.date)}
+                        {convertTime(
+                          referencePost?.date.toString() || post.date.toString()
+                        )}
                       </p>
                     </div>
                   </div>
@@ -365,7 +367,7 @@ export function Tweet({ post }: { post: Post }) {
                         e.stopPropagation();
                         submitRetweet(post.post_id);
                       }}
-                      disabled={post.ifreply}
+                      disabled={post.ifreply ? true : false}
                       className={`p-2 ${
                         post.ifreply
                           ? "cursor-not-allowed"
