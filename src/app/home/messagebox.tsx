@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "../lib/context";
@@ -154,16 +157,12 @@ export function Messagebox({ id, avatar }: OptionalId) {
   return (
     <div className="border-b border-gray-600 p-4">
       <div className="flex gap-3">
-        <div className="relative w-10 h-10 flex-shrink-0">
-          <Image
-            src={avatar || DEFAULT_AVATAR}
-            alt="User avatar"
-            fill
-            className="rounded-full bg-white object-cover"
-            onError={handleImageError}
-            sizes="40px"
-          />
-        </div>
+        <img
+          src={avatar || DEFAULT_AVATAR}
+          alt="User avatar"
+          onError={handleImageError}
+          className="w-10 h-10 rounded-full bg-white object-cover flex-shrink-0"
+        />
         <div className="flex-grow relative">
           <textarea
             value={content}

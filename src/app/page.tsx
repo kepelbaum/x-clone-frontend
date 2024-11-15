@@ -12,14 +12,6 @@ export default function Home() {
   const { loginSubmit, logAsGuest } = useAuth();
   const { errors } = useAppState();
 
-  function handleUser(e) {
-    setName(e.target.value);
-  }
-
-  function handlePass(e) {
-    setPass(e.target.value);
-  }
-
   return (
     <div className="w-screen h-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10">
       <Image
@@ -49,7 +41,9 @@ export default function Home() {
           <input
             type="text"
             placeholder="Username"
-            onChange={handleUser}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
             className="rounded-md border-2 border-gray-300 bg-gray-900 px-4 py-2 text-white placeholder-white
                hover:border-blue-400
                focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/50 focus:placeholder-transparent"
@@ -57,7 +51,9 @@ export default function Home() {
           <input
             type="password"
             placeholder="Password"
-            onChange={handlePass}
+            onChange={(e) => {
+              setPass(e.target.value);
+            }}
             className="rounded-md border-2 border-gray-300 bg-gray-900 px-4 py-2 text-white placeholder-white
                hover:border-blue-400
                focus:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/50 focus:placeholder-transparent"

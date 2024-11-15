@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+//found no easy way to replace img with default avatar
+//in Image element in case of broken link
 "use client";
 
 import { useEffect } from "react";
