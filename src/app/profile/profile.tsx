@@ -76,8 +76,8 @@ export function Profile({ profileUser }: ProfileProps) {
     }
   };
 
-  function toggleFollow(e) {
-    const name = e.target.getAttribute("username");
+  function toggleFollow(e: React.MouseEvent<HTMLElement>) {
+    const name = e.currentTarget.getAttribute("data-username");
     if (!name) return null;
     try {
       fetch(
@@ -141,16 +141,6 @@ export function Profile({ profileUser }: ProfileProps) {
     } else {
       setEditActive(true);
     }
-  }
-
-  function handleDisplayname(e) {
-    setDisplayname(e.target.value);
-  }
-  function handleAboutme(e) {
-    setAboutme(e.target.value);
-  }
-  function handleLocation(e) {
-    setLocation(e.target.value);
   }
 
   return (
@@ -247,7 +237,7 @@ export function Profile({ profileUser }: ProfileProps) {
           <div className="group">
             <button
               onClick={toggleFollow}
-              username={profileUser.username}
+              data-username={profileUser.username}
               className={`${user === profileUser.username ? "hidden" : ""} 
       border px-4 py-1.5 mb-2 rounded-full font-bold min-w-[100px] transition-colors
       ${
@@ -282,7 +272,9 @@ export function Profile({ profileUser }: ProfileProps) {
             <textarea
               name="displayname"
               defaultValue={displayname}
-              onChange={handleDisplayname}
+              onChange={(e) => {
+                setDisplayname(e.target.value);
+              }}
               className="w-full bg-gray-800 text-l font-bold p-2 rounded border border-gray-700"
               rows={1}
             />
@@ -296,7 +288,9 @@ export function Profile({ profileUser }: ProfileProps) {
             <textarea
               name="aboutme"
               defaultValue={aboutme}
-              onChange={handleAboutme}
+              onChange={(e) => {
+                setAboutme(e.target.value);
+              }}
               className="w-full bg-gray-800 mt-3 p-2 rounded border border-gray-700"
               rows={2}
             />
@@ -320,7 +314,9 @@ export function Profile({ profileUser }: ProfileProps) {
                 <textarea
                   name="location"
                   defaultValue={location}
-                  onChange={handleLocation}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                  }}
                   className="bg-gray-800 p-2 rounded border border-gray-700 text-white"
                   rows={1}
                 />
