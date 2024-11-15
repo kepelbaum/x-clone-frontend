@@ -7,19 +7,51 @@ import { convertTime } from "../lib/utils";
 import { Navbar } from "../navbar";
 import { Rightsection } from "../lib/rightsection";
 import { useHomeFetch } from "../lib/fetch";
+import { User } from "../lib/definitions";
 
-function NotificationItem({ type, data, users }) {
-  const actor = users.find((u) =>
-    type === "like"
-      ? u.username === data.username
-      : type === "follow"
-      ? u.username === data.follower
-      : type === "message"
-      ? u.username === data.sender
-      : type === "reply"
-      ? u.username === data.username
-      : u.username === data.username
-  );
+type NotificationType = "like" | "follow" | "reply" | "retweet" | "message";
+
+interface NotificationData {
+  id?: number;
+  post_id?: number;
+  username?: string;
+  poster?: string;
+  follower?: string;
+  following?: string;
+  sender?: string;
+  recipient?: string;
+  ifreply?: number;
+  ifretweet?: number;
+  date: string;
+  type: NotificationType;
+}
+
+function NotificationItem({
+  type,
+  data,
+  users,
+}: {
+  type: NotificationType;
+  data: NotificationData;
+  users: User[];
+}) {
+  const getUsernameForType = () => {
+    switch (type) {
+      case "like":
+        return data.username;
+      case "follow":
+        return data.follower;
+      case "message":
+        return data.sender;
+      case "reply":
+      case "retweet":
+        return data.username;
+      default:
+        return data.username;
+    }
+  };
+
+  const actor = users.find((u) => u.username === getUsernameForType());
 
   return (
     <div className="flex gap-3 p-4 border- border-gray-600 hover:bg-gray-600/10">
@@ -169,9 +201,7 @@ function NotificationItem({ type, data, users }) {
             </>
           )}
         </div>
-        <p className="text-gray-500 text-sm mt-1">
-          {convertTime(new Date(data.date))}
-        </p>
+        <p className="text-gray-500 text-sm mt-1">{convertTime(data.date)}</p>
       </div>
     </div>
   );
@@ -193,13 +223,15 @@ export default function Notifications() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateCounter]);
 
-  const allNotifications = [
-    ...(likes?.notifications?.filter((n) => n.poster === user) || []).map(
-      (n) => ({ ...n, type: "like" })
-    ),
+  const allNotifications: NotificationData[] = [
+    ...(
+      likes?.notifications?.filter(
+        (n) => n.poster === user && posts.some((p) => p.post_id === n.post_id)
+      ) || []
+    ).map((n): NotificationData => ({ ...n, type: "like" })),
 
     ...(follows?.notifications?.filter((n) => n.following === user) || []).map(
-      (n) => ({ ...n, type: "follow" })
+      (n): NotificationData => ({ ...n, type: "follow" })
     ),
 
     ...(
@@ -207,20 +239,22 @@ export default function Notifications() {
         const originalPost = posts.find((op) => op.post_id === p.ifreply);
         return p.ifreply && originalPost?.username === user;
       }) || []
-    ).map((n) => ({ ...n, type: "reply" })),
+    ).map((n): NotificationData => ({ ...n, type: "reply" })),
 
     ...(
       posts?.filter((p) => {
         const originalPost = posts.find((op) => op.post_id === p.ifretweet);
         return p.ifretweet && originalPost?.username === user;
       }) || []
-    ).map((n) => ({ ...n, type: "retweet" })),
+    ).map((n): NotificationData => ({ ...n, type: "retweet" })),
 
-    ...(messages?.filter((m) => m.recipient === user) || []).map((m) => ({
-      ...m,
-      type: "message",
-    })),
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+    ...(messages?.filter((m) => m.recipient === user) || []).map(
+      (m): NotificationData => ({
+        ...m,
+        type: "message",
+      })
+    ),
+  ].sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)));
 
   return (
     posts &&
@@ -228,7 +262,7 @@ export default function Notifications() {
       <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar mb={10} />
+          <Navbar />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <div className="sticky top-0 z-10 bg-black/80 backdrop-blur">
               <div className="flex px-4 py-3 border border-gray-600">
