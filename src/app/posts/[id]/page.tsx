@@ -82,7 +82,7 @@ export default function Home() {
       <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar mb={10} />
+          <Navbar />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <div className="sticky top-0 bg-black z-10">
               <div className="flex items-center gap-6 px-4 py-3">
