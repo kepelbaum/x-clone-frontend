@@ -7,14 +7,14 @@ export type User = {
   location?: string;
   ifcheckmark?: boolean;
   password: string;
-  date: Date;
+  date: string;
 };
 
 export type Post = {
   post_id: number;
   username: string;
   content?: string;
-  date: Date;
+  date: string;
   ifreply?: number;
   ifretweet?: number;
   media_url?: string;
@@ -28,14 +28,14 @@ export type Message = {
   media_url?: string;
   media_type?: string;
   id: number;
-  date: Date;
+  date: string;
 };
 
 export type Follow = {
   follower: string;
   following: string;
   id: number;
-  date: Date;
+  date: string;
 };
 
 export type FollowData = {
@@ -47,7 +47,7 @@ export type FollowData = {
 export type Like = {
   username: string;
   id: number;
-  date: Date;
+  date: string;
   post_id: number;
   poster: string;
 };
