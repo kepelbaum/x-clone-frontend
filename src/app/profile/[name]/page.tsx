@@ -55,7 +55,7 @@ export default function Home() {
               return <Profile key={user.username} profileUser={user} />;
             })}
 
-          <Rightsection profUsername={params.name} />
+          <Rightsection profUsername={params.name as string} />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
         </div>
       </div>
