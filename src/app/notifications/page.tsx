@@ -279,7 +279,6 @@ export default function Notifications() {
                   type={notification.type}
                   data={notification}
                   users={users}
-                  posts={posts}
                 />
               ))}
 
