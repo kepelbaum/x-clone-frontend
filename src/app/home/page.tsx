@@ -10,8 +10,18 @@ import { Tweet } from "../lib/tweet";
 import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
 import { useLocalStorage } from "../lib/useLocalStorage";
+import dynamic from "next/dynamic";
 
 export default function Home() {
+  return <DynamicHomeContent />;
+}
+
+const DynamicHomeContent = dynamic(() => Promise.resolve(HomeContent), {
+  ssr: false,
+  loading: () => <div className="bg-black w-screen h-screen" />,
+});
+
+function HomeContent() {
   const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
   const user = useLocalStorage("username");
