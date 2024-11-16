@@ -6,11 +6,21 @@ import { useHomeFetch } from "../lib/fetch";
 import { Navbar } from "../navbar";
 import { Profile } from "./profile";
 import { Rightsection } from "../lib/rightsection";
+import { useLocalStorage } from "../lib/useLocalStorage";
+import dynamic from "next/dynamic";
 
-export default function Home() {
+export default function ProfilePage() {
+  return <DynamicProfileContent />;
+}
+
+const DynamicProfileContent = dynamic(() => Promise.resolve(ProfileContent), {
+  ssr: false,
+  loading: () => <div className="bg-black w-screen h-screen" />,
+});
+
+function ProfileContent() {
   const { posts, users, updateCounter, setActive } = useAppState();
-  // const token = localStorage.getItem("token");
-  const currentUser = localStorage.getItem("username");
+  const currentUser = useLocalStorage("username");
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
     useHomeFetch();
