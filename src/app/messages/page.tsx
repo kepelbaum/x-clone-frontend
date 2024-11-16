@@ -9,8 +9,17 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import Image from "next/image";
+import { Suspense } from "react";
 
-export default function MessageInterface() {
+export default function Message() {
+  return (
+    <Suspense fallback={<div className="bg-black w-screen h-screen" />}>
+      <MessageInterface />
+    </Suspense>
+  );
+}
+
+function MessageInterface() {
   const { posts, users, updateCounter, messages, setUpdateCounter } =
     useAppState();
 

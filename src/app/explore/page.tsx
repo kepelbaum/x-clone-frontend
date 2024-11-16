@@ -130,7 +130,7 @@ function ExploreContent() {
 
 export default function Explore() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="bg-black w-screen h-screen" />}>
       <ExploreContent />
     </Suspense>
   );
