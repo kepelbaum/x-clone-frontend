@@ -7,6 +7,7 @@ import { Navbar } from "../navbar";
 import { Tweet } from "../lib/tweet";
 import { Rightsection } from "../lib/rightsection";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export default function Explore() {
   const { posts, users, updateCounter } = useAppState();
@@ -102,23 +103,24 @@ export default function Explore() {
               </div>
               <div className="h-px bg-gray-600" />
             </div>
-
-            <div className="divide-y divide-gray-600">
-              {searchQuery === ""
-                ? posts
-                    .filter((post) => !post.ifreply)
-                    .sort((a, b) => (a.date > b.date ? -1 : 1))
-                    .map((post) => <Tweet key={post.post_id} post={post} />)
-                : filteredPosts
-                    .filter((post) => !post.ifreply)
-                    .sort((a, b) => (a.date > b.date ? -1 : 1))
-                    .map((post) => <Tweet key={post.post_id} post={post} />)}
-              {searchQuery !== "" && filteredPosts.length === 0 && (
-                <div className="p-4 text-center text-gray-500">
-                  No posts found matching {`${searchQuery}`}
-                </div>
-              )}
-            </div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <div className="divide-y divide-gray-600">
+                {searchQuery === ""
+                  ? posts
+                      .filter((post) => !post.ifreply)
+                      .sort((a, b) => (a.date > b.date ? -1 : 1))
+                      .map((post) => <Tweet key={post.post_id} post={post} />)
+                  : filteredPosts
+                      .filter((post) => !post.ifreply)
+                      .sort((a, b) => (a.date > b.date ? -1 : 1))
+                      .map((post) => <Tweet key={post.post_id} post={post} />)}
+                {searchQuery !== "" && filteredPosts.length === 0 && (
+                  <div className="p-4 text-center text-gray-500">
+                    No posts found matching {`${searchQuery}`}
+                  </div>
+                )}
+              </div>
+            </Suspense>
           </main>
           <Rightsection ifSearchInvisible={true} />
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
