@@ -6,9 +6,10 @@ import { convertTime } from "./utils";
 import Link from "next/link";
 import Twemoji from "react-twemoji";
 import Image from "next/image";
+import { useLocalStorage } from "./useLocalStorage";
 
 export function Tweet({ post }: { post: Post }) {
-  const token = localStorage.getItem("token");
+  const token = useLocalStorage("token");
   const user = localStorage.getItem("username");
   const { updateCounter, setUpdateCounter, likes, follows, users, posts } =
     useAppState();
@@ -434,7 +435,7 @@ export function Tweet({ post }: { post: Post }) {
                       </svg>
                     </button>
                     <span className="text-sm group-hover:text-pink-500">
-                      {likes.likeCounts
+                      {likes.likeCounts[referencePost?.post_id || post.post_id]
                         ? likes.likeCounts[
                             referencePost?.post_id || post.post_id
                           ]
