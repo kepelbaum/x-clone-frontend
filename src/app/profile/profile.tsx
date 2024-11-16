@@ -1,7 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//(or background, even though default one is not implemented right now)
-//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "../lib/context";
@@ -11,6 +7,8 @@ import { User } from "../lib/definitions";
 import { formatTimeMonthYear } from "../lib/utils";
 import { useState } from "react";
 import Link from "next/link";
+import { useLocalStorage } from "../lib/useLocalStorage";
+import Image from "next/image";
 
 interface ProfileProps {
   profileUser: User;
@@ -19,23 +17,14 @@ interface ProfileProps {
 export function Profile({ profileUser }: ProfileProps) {
   const { posts, follows, updateCounter, setUpdateCounter, active, likes } =
     useAppState();
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("username");
+  const token = useLocalStorage("token");
+  const user = useLocalStorage("username");
   const [editActive, setEditActive] = useState(false);
   const [location, setLocation] = useState(profileUser.location || "Unknown");
   const [aboutme, setAboutme] = useState(profileUser.aboutme || "");
   const [displayname, setDisplayname] = useState(profileUser.displayname);
   const [avatar, setAvatar] = useState(profileUser.avatar);
   const [background, setBackground] = useState(profileUser.background);
-
-  const DEFAULT_AVATAR =
-    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    e.currentTarget.src = DEFAULT_AVATAR;
-  };
 
   const handleImageUpload = async (
     file: File,
@@ -148,10 +137,11 @@ export function Profile({ profileUser }: ProfileProps) {
       <div className="relative">
         <div className="h-48 bg-gray-700 relative">
           {background && (
-            <img
+            <Image
               src={background}
-              className="w-full h-full object-cover"
+              className="object-cover"
               alt="Profile background"
+              fill
             />
           )}
           {user === profileUser.username && (
@@ -182,12 +172,14 @@ export function Profile({ profileUser }: ProfileProps) {
 
         <div className="absolute left-4 -bottom-16">
           <div className="relative">
-            <img
-              src={avatar || DEFAULT_AVATAR}
-              className="w-32 h-32 rounded-full border-4 border-black bg-white object-cover"
-              onError={handleImageError}
-              alt="Profile avatar"
-            />
+            <div className="relative w-32 h-32">
+              <Image
+                src={avatar}
+                className="rounded-full border-4 border-black bg-white object-cover"
+                alt="Profile avatar"
+                fill
+              />
+            </div>
             {user === profileUser.username && (
               <label className="absolute bottom-0 right-0 w-8 h-8 bg-black bg-opacity-60 rounded-full cursor-pointer flex items-center justify-center hover:bg-opacity-80 border-2 border-black">
                 <input

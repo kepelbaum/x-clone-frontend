@@ -1,7 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//in Image element in case of broken link
-
 "use client";
 
 import { useState, useMemo, useRef } from "react";
@@ -11,6 +7,8 @@ import { useEffect } from "react";
 import { Navbar } from "../navbar";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useLocalStorage } from "../lib/useLocalStorage";
+import Image from "next/image";
 
 export default function MessageInterface() {
   const { posts, users, updateCounter, messages, setUpdateCounter } =
@@ -22,7 +20,7 @@ export default function MessageInterface() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const token = useLocalStorage("token");
   const currentUser = localStorage.getItem("username");
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
@@ -30,15 +28,6 @@ export default function MessageInterface() {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const [showChat, setShowChat] = useState(false);
-
-  const DEFAULT_AVATAR =
-    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    e.currentTarget.src = DEFAULT_AVATAR;
-  };
 
   const getLastMessage = (username: string) => {
     return messages
@@ -203,12 +192,13 @@ export default function MessageInterface() {
                       className={`flex items-center gap-3 p-4 hover:bg-gray-800 cursor-pointer border-b border-gray-600 
                         ${selectedUser === user.username ? "bg-gray-800" : ""}`}
                     >
-                      <div className="w-12 h-12 rounded-full bg-gray-600 flex-shrink-0">
-                        <img
-                          src={user.avatar || DEFAULT_AVATAR}
-                          onError={handleImageError}
-                          className="w-full h-full rounded-full object-cover"
-                          alt=""
+                      <div className="relative w-10 h-10">
+                        <Image
+                          src={user.avatar}
+                          alt={`${user}'s avatar`}
+                          fill
+                          className="rounded-full object-cover"
+                          sizes="40px"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -271,16 +261,23 @@ export default function MessageInterface() {
                               href={`/profile/${message.sender}`}
                               className="w-10 h-10 rounded-full bg-gray-600 flex-shrink-0"
                             >
-                              <img
-                                src={
-                                  users.find(
-                                    (u) => u.username === message.sender
-                                  )?.avatar || DEFAULT_AVATAR
-                                }
-                                onError={handleImageError}
-                                className="w-full h-full rounded-full object-cover"
-                                alt=""
-                              />
+                              <div className="relative w-10 h-10">
+                                <Image
+                                  src={
+                                    users.find(
+                                      (u) => u.username === message.sender
+                                    )!.avatar
+                                  }
+                                  className="rounded-full object-cover"
+                                  alt={`${
+                                    users.find(
+                                      (u) => u.username === message.sender
+                                    )!.username
+                                  }'s avatar`}
+                                  sizes="40px"
+                                  fill
+                                />
+                              </div>
                             </Link>
                             <div
                               className={`max-w-[70%] p-3 rounded-2xl ${

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAppState } from "./context";
 import Link from "next/link";
 import Image from "next/image";
+import { useLocalStorage } from "./useLocalStorage";
 
 interface User {
   username: string;
@@ -13,7 +14,7 @@ interface User {
 
 export function Whotofollow({ profUsername }: { profUsername?: string }) {
   const { users, follows } = useAppState();
-  const token = localStorage.getItem("token");
+  const token = useLocalStorage("token");
   const user = localStorage.getItem("username");
 
   const [followStatus, setFollowStatus] = useState<{ [key: string]: boolean }>(
