@@ -1,6 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//in Image element in case of broken link
 "use client";
 
 import { useEffect } from "react";
@@ -12,11 +9,12 @@ import { Messagebox } from "./messagebox";
 import { Tweet } from "../lib/tweet";
 import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
+import { useLocalStorage } from "../lib/useLocalStorage";
 
 export default function Home() {
   const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
-  const user = localStorage.getItem("username");
+  const user = useLocalStorage("username");
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
