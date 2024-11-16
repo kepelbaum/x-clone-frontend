@@ -11,7 +11,7 @@ import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
 import { useLocalStorage } from "../lib/useLocalStorage";
 
-export function HomeContent() {
+function HomeContent() {
   const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
   const user = useLocalStorage("username");
