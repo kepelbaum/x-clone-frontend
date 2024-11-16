@@ -4,13 +4,24 @@ import { useState } from "react";
 import { useAppState } from "../lib/context";
 import { Navbar } from "../navbar";
 import { Rightsection } from "../lib/rightsection";
+import { useLocalStorage } from "../lib/useLocalStorage";
+import dynamic from "next/dynamic";
 
 export default function Settings() {
+  return <DynamicSettingsContent />;
+}
+
+const DynamicSettingsContent = dynamic(() => Promise.resolve(SettingsContent), {
+  ssr: false,
+  loading: () => <div className="bg-black w-screen h-screen" />,
+});
+
+function SettingsContent() {
   const { errors, setErrors } = useAppState();
   const [errorColor, setErrorColor] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const token = localStorage.getItem("token");
+  const token = useLocalStorage("token");
 
   const handlePasswordChange = async () => {
     if (newPass !== confirmPass) {
