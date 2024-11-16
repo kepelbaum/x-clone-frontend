@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
+import { useEffect } from "react";
 import { useAppState } from "../lib/context";
 import { useHomeFetch } from "../lib/fetch";
 import { Navbar } from "../navbar";
@@ -11,7 +11,7 @@ import { Rightsection } from "../lib/rightsection";
 import { useState } from "react";
 import { useLocalStorage } from "../lib/useLocalStorage";
 
-function HomeContent() {
+export default function Home() {
   const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
   const user = useLocalStorage("username");
@@ -84,13 +84,5 @@ function HomeContent() {
         <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
       </div>
     </div>
-  );
-}
-
-export default function Home() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomeContent />
-    </Suspense>
   );
 }
