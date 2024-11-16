@@ -70,40 +70,40 @@ export default function Explore() {
   return (
     posts &&
     users && (
-      <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
-        <div className="w-full flex relative">
-          <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
-          <Navbar />
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
+          <div className="w-full flex relative">
+            <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
+            <Navbar />
 
-          <main className="w-full md:w-[600px] pb-16 md:pb-0 border-x border-gray-600">
-            <div className="sticky top-0 z-10 bg-black/80">
-              <div className="px-4 py-3">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      className="text-gray-400"
-                    >
-                      <circle cx="11" cy="11" r="8" />
-                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
+            <main className="w-full md:w-[600px] pb-16 md:pb-0 border-x border-gray-600">
+              <div className="sticky top-0 z-10 bg-black/80">
+                <div className="px-4 py-3">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="text-gray-400"
+                      >
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search posts"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      className="w-full bg-gray-900 rounded-full py-2 pl-10 pr-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                   </div>
-                  <input
-                    type="text"
-                    placeholder="Search posts"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className="w-full bg-gray-900 rounded-full py-2 pl-10 pr-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
                 </div>
+                <div className="h-px bg-gray-600" />
               </div>
-              <div className="h-px bg-gray-600" />
-            </div>
-            <Suspense fallback={<div>Loading...</div>}>
               <div className="divide-y divide-gray-600">
                 {searchQuery === ""
                   ? posts
@@ -120,12 +120,12 @@ export default function Explore() {
                   </div>
                 )}
               </div>
-            </Suspense>
-          </main>
-          <Rightsection ifSearchInvisible={true} />
-          <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
+            </main>
+            <Rightsection ifSearchInvisible={true} />
+            <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
+          </div>
         </div>
-      </div>
+      </Suspense>
     )
   );
 }
