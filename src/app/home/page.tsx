@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, Suspense } from "react";
 import { useAppState } from "../lib/context";
 import { useHomeFetch } from "../lib/fetch";
