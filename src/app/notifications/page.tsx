@@ -8,6 +8,19 @@ import { Navbar } from "../navbar";
 import { Rightsection } from "../lib/rightsection";
 import { useHomeFetch } from "../lib/fetch";
 import { User } from "../lib/definitions";
+import dynamic from "next/dynamic";
+
+export default function Notifications() {
+  return <DynamicNotificationsContent />;
+}
+
+const DynamicNotificationsContent = dynamic(
+  () => Promise.resolve(NotificationsContent),
+  {
+    ssr: false,
+    loading: () => <div className="bg-black w-screen h-screen" />,
+  }
+);
 
 type NotificationType = "like" | "follow" | "reply" | "retweet" | "message";
 
@@ -207,7 +220,7 @@ function NotificationItem({
   );
 }
 
-export default function Notifications() {
+function NotificationsContent() {
   const { likes, follows, messages, posts, users, updateCounter } =
     useAppState();
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
