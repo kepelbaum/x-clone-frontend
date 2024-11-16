@@ -1,8 +1,8 @@
 export type User = {
   username: string;
   displayname: string;
-  avatar?: string;
-  background?: string;
+  avatar: string;
+  background: string;
   aboutme?: string;
   location?: string;
   ifcheckmark?: boolean;

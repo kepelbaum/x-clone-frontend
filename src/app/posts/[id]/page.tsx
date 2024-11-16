@@ -22,6 +22,8 @@ export default function Home() {
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
 
+  const userAvatar = users.filter((u) => u.username === user)[0]?.avatar;
+
   useEffect(() => {
     fetchPosts();
     fetchUsers();
@@ -78,7 +80,8 @@ export default function Home() {
 
   return (
     posts &&
-    users && (
+    users &&
+    userAvatar && (
       <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
@@ -116,10 +119,7 @@ export default function Home() {
                 </div>
               ))}
 
-            <Messagebox
-              id={Number(params.id)}
-              avatar={users.filter((u) => u.username === user)[0]?.avatar}
-            />
+            <Messagebox id={Number(params.id)} avatar={userAvatar} />
 
             {posts
               .filter(

@@ -1,17 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//in Image element in case of broken link
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { useAppState } from "./context";
 import Link from "next/link";
+import Image from "next/image";
 
 interface User {
   username: string;
   displayname: string;
-  avatar?: string;
+  avatar: string;
 }
 
 export function Whotofollow({ profUsername }: { profUsername?: string }) {
@@ -23,14 +20,6 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
     {}
   );
   const [recommendedUsers, setRecommendedUsers] = useState<Array<User>>([]);
-  const DEFAULT_AVATAR =
-    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    e.currentTarget.src = DEFAULT_AVATAR;
-  };
 
   useEffect(() => {
     if (users?.length && follows?.notifications?.length) {
@@ -103,12 +92,15 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
           <div className="flex items-center gap-3 min-w-0">
             <div className="flex-shrink-0">
               <Link href={`/profile/${ele.username}`}>
-                <img
-                  src={ele.avatar || DEFAULT_AVATAR}
-                  onError={handleImageError}
-                  alt={`${ele.username}'s avatar`}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={ele.avatar}
+                    alt={`${ele.username}'s avatar`}
+                    fill
+                    className="rounded-full object-cover"
+                    sizes="40px"
+                  />
+                </div>
               </Link>
             </div>
             <div className="min-w-0 flex-shrink">

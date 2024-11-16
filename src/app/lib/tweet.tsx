@@ -1,6 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "./context";
@@ -20,14 +17,9 @@ export function Tweet({ post }: { post: Post }) {
     ? posts.find((p) => p.post_id === post.ifretweet)
     : post;
 
-  const DEFAULT_AVATAR =
-    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    e.currentTarget.src = DEFAULT_AVATAR;
-  };
+  const referenceUser = users.find(
+    (u) => u.username === referencePost?.username
+  );
 
   async function handleLike(post_id: number) {
     const targetPostId = referencePost?.post_id || post_id;
@@ -139,7 +131,8 @@ export function Tweet({ post }: { post: Post }) {
     users &&
     follows &&
     likes &&
-    post && (
+    referenceUser &&
+    referencePost && (
       <Twemoji>
         <div
           onClick={() =>
@@ -175,22 +168,17 @@ export function Tweet({ post }: { post: Post }) {
 
             <div className="border-gray-600 border-b p-4 flex gap-2">
               <Link
-                href={`/profile/${referencePost?.username || post.username}`}
+                href={`/profile/${referencePost?.username}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex-shrink-0 relative z-10"
               >
                 <div className="relative w-10 h-10">
-                  <img
-                    src={
-                      users.find(
-                        (u) =>
-                          u.username ===
-                          (referencePost?.username || post.username)
-                      )?.avatar || DEFAULT_AVATAR
-                    }
-                    alt={`${referencePost?.username || post.username}'s avatar`}
-                    className="w-10 h-10 rounded-full object-cover"
-                    onError={handleImageError}
+                  <Image
+                    src={referenceUser!.avatar}
+                    alt={`${referencePost?.username}'s avatar`}
+                    fill
+                    className="rounded-full object-cover"
+                    sizes="40px"
                   />
                 </div>
               </Link>
@@ -200,11 +188,7 @@ export function Tweet({ post }: { post: Post }) {
                   <div className="flex flex-1">
                     <div className="flex gap-3 items-center flex-wrap">
                       <p className="font-bold truncate">
-                        {
-                          users.find(
-                            (u) => u.username === referencePost?.username
-                          )?.displayname
-                        }
+                        {referenceUser?.displayname}
                       </p>
                       <p className="text-gray-400 truncate">
                         @{referencePost?.username}

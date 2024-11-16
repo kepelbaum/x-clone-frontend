@@ -1,6 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-//found no easy way to replace img with default avatar
-//in Image element in case of broken link
 "use client";
 
 import { useAppState } from "../lib/context";
@@ -13,7 +10,7 @@ import { EmojiClickData } from "emoji-picker-react";
 
 interface OptionalId {
   id?: number;
-  avatar?: string;
+  avatar: string;
 }
 
 export function Messagebox({ id, avatar }: OptionalId) {
@@ -33,14 +30,6 @@ export function Messagebox({ id, avatar }: OptionalId) {
   const hasContent = content.length > 0 || selectedFile !== null;
   const isOverLimit = content.length > 255;
 
-  const DEFAULT_AVATAR =
-    "https://cdn.midjourney.com/8bd0878a-c555-43c5-aeaa-cea2c62a3abf/grid_0_640_N.webp";
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    e.currentTarget.src = DEFAULT_AVATAR;
-  };
   function useClickOutside(ref: RefObject<HTMLElement>, handler: () => void) {
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
@@ -157,12 +146,15 @@ export function Messagebox({ id, avatar }: OptionalId) {
   return (
     <div className="border-b border-gray-600 p-4">
       <div className="flex gap-3">
-        <img
-          src={avatar || DEFAULT_AVATAR}
-          alt="User avatar"
-          onError={handleImageError}
-          className="w-10 h-10 rounded-full bg-white object-cover flex-shrink-0"
-        />
+        <div className="relative w-10 h-10 flex-shrink-0">
+          <Image
+            src={avatar}
+            alt="User avatar"
+            fill
+            className="rounded-full bg-white object-cover"
+            sizes="40px"
+          />
+        </div>
         <div className="flex-grow relative">
           <textarea
             value={content}

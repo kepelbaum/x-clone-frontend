@@ -16,12 +16,12 @@ import { useState } from "react";
 export default function Home() {
   const { posts, users, updateCounter, active, setActive, follows } =
     useAppState();
-
-  // const token = localStorage.getItem("token");
   const user = localStorage.getItem("username");
   const [localUpdateCounter, setLocalUpdateCounter] = useState(0);
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
+
+  const userAvatar = users.filter((u) => u.username === user)[0]?.avatar;
 
   useEffect(() => {
     fetchPosts();
@@ -51,16 +51,16 @@ export default function Home() {
 
   return (
     posts &&
-    users && (
+    users &&
+    userAvatar &&
+    user && (
       <div className="bg-black text-white min-h-screen fixed inset-0 overflow-y-auto overflow-x-hidden">
         <div className="w-full max-w-[100vw] flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
             <TopHomeMenu />
-            <Messagebox
-              avatar={users.filter((u) => u.username === user)[0]?.avatar}
-            />
+            <Messagebox avatar={userAvatar} />
             {active === "foryou" &&
               posts
                 .filter((post) => !post.ifreply)
