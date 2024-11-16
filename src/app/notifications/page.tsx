@@ -9,6 +9,7 @@ import { Rightsection } from "../lib/rightsection";
 import { useHomeFetch } from "../lib/fetch";
 import { User } from "../lib/definitions";
 import dynamic from "next/dynamic";
+import { useLocalStorage } from "../lib/useLocalStorage";
 
 export default function Notifications() {
   return <DynamicNotificationsContent />;
@@ -225,7 +226,7 @@ function NotificationsContent() {
     useAppState();
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
-  const user = localStorage.getItem("username");
+  const user = useLocalStorage("username");
 
   useEffect(() => {
     fetchPosts();
@@ -271,7 +272,8 @@ function NotificationsContent() {
 
   return (
     posts &&
-    users && (
+    users &&
+    user && (
       <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
