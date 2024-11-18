@@ -7,7 +7,7 @@ import { Search } from "lucide-react";
 interface GiphyPickerProps {
   onSelect: (gif: { url: string }) => void;
   onClose: () => void;
-  // className: string;
+  token: string | null;
 }
 
 interface Gif {
@@ -20,7 +20,11 @@ interface Gif {
   };
 }
 
-export default function GiphyPicker({ onSelect, onClose }: GiphyPickerProps) {
+export default function GiphyPicker({
+  onSelect,
+  onClose,
+  token,
+}: GiphyPickerProps) {
   const [search, setSearch] = useState("");
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,8 +38,14 @@ export default function GiphyPicker({ onSelect, onClose }: GiphyPickerProps) {
     setLoading(true);
     setError(null);
     try {
-      const url = `https://api.giphy.com/v1/gifs/trending?api_key=${process.env.NEXT_PUBLIC_GIPHY_API_KEY}&limit=20&rating=g`;
-      const response = await fetch(url);
+      const url = `https://x-clone-backend-production-15d8.up.railway.app/api/gifs`;
+      const response = await fetch(url, {
+        mode: "cors",
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -60,8 +70,14 @@ export default function GiphyPicker({ onSelect, onClose }: GiphyPickerProps) {
     setLoading(true);
     setError(null);
     try {
-      const url = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.NEXT_PUBLIC_GIPHY_API_KEY}&q=${query}&limit=20&rating=g`;
-      const response = await fetch(url);
+      const url = `https://x-clone-backend-production-15d8.up.railway.app/api/gifs/search?query=${encodeURIComponent(
+        query
+      )}`;
+      const response = await fetch(url, {
+        headers: {
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

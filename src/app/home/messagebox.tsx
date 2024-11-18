@@ -258,6 +258,7 @@ export function Messagebox({ id, avatar }: OptionalId) {
               <GiphyPicker
                 onSelect={handleGifSelect}
                 onClose={() => setShowGifPicker(false)}
+                token={token}
               />
             </div>
           )}
