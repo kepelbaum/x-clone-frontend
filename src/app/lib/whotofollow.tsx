@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAppState } from "./context";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,8 +21,9 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
     {}
   );
   const [recommendedUsers, setRecommendedUsers] = useState<Array<User>>([]);
+  const [lastUpdateTime, setLastUpdateTime] = useState<number>(Date.now());
 
-  useEffect(() => {
+  const getRecommendedUsers = useCallback(() => {
     if (users?.length && follows?.notifications?.length) {
       const notFollowed = users
         .filter(
@@ -50,6 +51,32 @@ export function Whotofollow({ profUsername }: { profUsername?: string }) {
       setFollowStatus(initialStatus);
     }
   }, [users, follows?.notifications, user, profUsername]);
+  useEffect(() => {
+    const timeSinceLastUpdate = Date.now() - lastUpdateTime;
+    // Only refresh if it's been more than 5 minutes or there are no recommended users
+    if (timeSinceLastUpdate > 300000 || recommendedUsers.length === 0) {
+      getRecommendedUsers();
+      setLastUpdateTime(Date.now());
+    }
+  }, [getRecommendedUsers, lastUpdateTime, recommendedUsers.length]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        const timeSinceLastUpdate = Date.now() - lastUpdateTime;
+        if (timeSinceLastUpdate > 300000) {
+          // 5 minutes
+          getRecommendedUsers();
+          setLastUpdateTime(Date.now());
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [getRecommendedUsers, lastUpdateTime]);
 
   if (!follows?.notifications?.length) return null;
 
