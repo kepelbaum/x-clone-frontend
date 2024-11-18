@@ -29,6 +29,8 @@ export default function GiphyPicker({
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchTimeout, setSearchTimeout] =
+    useState<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     fetchTrendingGifs();
@@ -96,7 +98,16 @@ export default function GiphyPicker({
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    searchGifs(value);
+
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    const timeoutId = setTimeout(() => {
+      searchGifs(value);
+    }, 300);
+
+    setSearchTimeout(timeoutId);
   };
 
   const handleSelect = (gif: Gif) => {
