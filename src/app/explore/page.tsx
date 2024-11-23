@@ -8,6 +8,7 @@ import { Navbar } from "../navbar";
 import { Tweet } from "../lib/tweet";
 import { Rightsection } from "../lib/rightsection";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Post } from "../lib/definitions";
 
 function ExploreContent() {
   const { posts, users, updateCounter } = useAppState();
@@ -16,6 +17,11 @@ function ExploreContent() {
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get("key") || "");
+
+  const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 20;
+  const [loading, setLoading] = useState(false);
 
   const { fetchPosts, fetchUsers, fetchMessages, fetchFollows, fetchLikes } =
     useHomeFetch();
@@ -56,6 +62,7 @@ function ExploreContent() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearchQuery(newValue);
+    setCurrentPage(1);
 
     if (newValue.trim()) {
       router.push(`/explore?key=${newValue.trim()}`);
@@ -64,11 +71,43 @@ function ExploreContent() {
     }
   };
 
-  const filteredPosts = posts?.filter((post) =>
-    post.content?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getFilteredPosts = (): Post[] => {
+    if (!posts) return [];
+
+    const filtered =
+      searchQuery === ""
+        ? posts.filter((post) => !post.ifreply)
+        : posts.filter(
+            (post) =>
+              !post.ifreply &&
+              post.content?.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+
+    return filtered.sort((a, b) => (a.date > b.date ? -1 : 1));
+  };
+
+  useEffect(() => {
+    if (posts) {
+      const filteredPosts = getFilteredPosts();
+      const initialPosts = filteredPosts.slice(0, postsPerPage);
+      setDisplayedPosts(initialPosts);
+      setCurrentPage(1);
+    }
+  }, [posts, searchQuery]);
+
+  const loadMorePosts = () => {
+    setLoading(true);
+    const filteredPosts = getFilteredPosts();
+    const nextPosts = filteredPosts.slice(0, (currentPage + 1) * postsPerPage);
+    setDisplayedPosts(nextPosts);
+    setCurrentPage((prev) => prev + 1);
+    setLoading(false);
+  };
 
   if (!posts || !users) return null;
+
+  const allFilteredPosts = getFilteredPosts();
+  const hasMorePosts = allFilteredPosts.length > displayedPosts.length;
 
   return (
     <div className="fixed inset-0 overflow-y-auto overflow-x-hidden bg-black text-white">
@@ -105,19 +144,22 @@ function ExploreContent() {
             <div className="h-px bg-gray-600" />
           </div>
           <div className="divide-y divide-gray-600">
-            {searchQuery === ""
-              ? posts
-                  .filter((post) => !post.ifreply)
-                  .sort((a, b) => (a.date > b.date ? -1 : 1))
-                  .map((post) => <Tweet key={post.post_id} post={post} />)
-              : filteredPosts
-                  .filter((post) => !post.ifreply)
-                  .sort((a, b) => (a.date > b.date ? -1 : 1))
-                  .map((post) => <Tweet key={post.post_id} post={post} />)}
-            {searchQuery !== "" && filteredPosts.length === 0 && (
+            {displayedPosts.map((post) => (
+              <Tweet key={post.post_id} post={post} />
+            ))}
+            {searchQuery !== "" && allFilteredPosts.length === 0 && (
               <div className="p-4 text-center text-gray-500">
                 No posts found matching {`${searchQuery}`}
               </div>
+            )}
+            {hasMorePosts && (
+              <button
+                onClick={loadMorePosts}
+                disabled={loading}
+                className="w-full py-4 text-blue-400 hover:bg-gray-900 transition-colors disabled:opacity-50"
+              >
+                {loading ? "Loading..." : "Show more"}
+              </button>
             )}
           </div>
         </main>

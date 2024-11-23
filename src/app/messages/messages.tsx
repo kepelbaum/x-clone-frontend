@@ -21,7 +21,7 @@ export default function Messages() {
   const [hasScrolled, setHasScrolled] = useState(false);
 
   const token = useLocalStorage("token");
-  const currentUser = localStorage.getItem("username");
+  const currentUser = useLocalStorage("username");
   const { fetchPosts, fetchUsers, fetchFollows, fetchLikes, fetchMessages } =
     useHomeFetch();
 

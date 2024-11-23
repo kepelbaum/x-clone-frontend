@@ -3,9 +3,9 @@
 import { useAppState } from "../lib/context";
 import { Profiletopmenu } from "./profiletopmenu";
 import { Tweet } from "../lib/tweet";
-import { User } from "../lib/definitions";
+import { User, Post } from "../lib/definitions";
 import { formatTimeMonthYear } from "../lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import Image from "next/image";
@@ -25,6 +25,73 @@ export function Profile({ profileUser }: ProfileProps) {
   const [displayname, setDisplayname] = useState(profileUser.displayname);
   const [avatar, setAvatar] = useState(profileUser.avatar);
   const [background, setBackground] = useState(profileUser.background);
+
+  const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 20;
+  const [loading, setLoading] = useState(false);
+
+  const getFilteredPosts = (): Post[] => {
+    if (!posts) return [];
+
+    let filtered: Post[] = [];
+    switch (active) {
+      case "posts":
+        filtered = posts.filter(
+          (post) => post.username === profileUser.username && !post.ifreply
+        );
+        return filtered.sort((a, b) => (a.date > b.date ? -1 : 1));
+
+      case "replies":
+        filtered = posts.filter(
+          (post) => post.username === profileUser.username && post.ifreply
+        );
+        return filtered.sort((a, b) => (a.date > b.date ? -1 : 1));
+
+      case "likes":
+        filtered = posts.filter((post) =>
+          likes.notifications.find(
+            (like) =>
+              like.username === profileUser.username &&
+              like.post_id === post.post_id
+          )
+        );
+        return filtered.sort((a, b) => {
+          const likeA = likes.notifications.find(
+            (like) =>
+              like.post_id === a.post_id &&
+              like.username === profileUser.username
+          );
+          const likeB = likes.notifications.find(
+            (like) =>
+              like.post_id === b.post_id &&
+              like.username === profileUser.username
+          );
+          return (
+            new Date(likeB!.date).getTime() - new Date(likeA!.date).getTime()
+          );
+        });
+
+      default:
+        return [];
+    }
+  };
+
+  useEffect(() => {
+    const filteredPosts = getFilteredPosts();
+    const initialPosts = filteredPosts.slice(0, postsPerPage);
+    setDisplayedPosts(initialPosts);
+    setCurrentPage(1);
+  }, [active, posts, likes.notifications]);
+
+  const loadMorePosts = () => {
+    setLoading(true);
+    const filteredPosts = getFilteredPosts();
+    const nextPosts = filteredPosts.slice(0, (currentPage + 1) * postsPerPage);
+    setDisplayedPosts(nextPosts);
+    setCurrentPage((prev) => prev + 1);
+    setLoading(false);
+  };
 
   const handleImageUpload = async (
     file: File,
@@ -131,6 +198,9 @@ export function Profile({ profileUser }: ProfileProps) {
       setEditActive(true);
     }
   }
+
+  const allFilteredPosts = getFilteredPosts();
+  const hasMorePosts = allFilteredPosts.length > displayedPosts.length;
 
   return (
     <main className="w-full md:w-[600px] pb-16 md:pb-0 border-x-2 border-gray-600">
@@ -351,45 +421,21 @@ export function Profile({ profileUser }: ProfileProps) {
         </div>
         <Profiletopmenu hide={profileUser.username !== user} />
       </div>
-      {active === "posts" &&
-        posts
-          .filter(
-            (post) => post.username === profileUser.username && !post.ifreply
-          )
-          .sort((a, b) => (a.date > b.date ? -1 : 1))
-          .map((post) => <Tweet key={post.post_id} post={post} />)}
-      {active === "replies" &&
-        posts
-          .filter(
-            (post) => post.username === profileUser.username && post.ifreply
-          )
-          .sort((a, b) => (a.date > b.date ? -1 : 1))
-          .map((post) => <Tweet key={post.post_id} post={post} />)}
-      {active === "likes" &&
-        posts
-          .filter((post) =>
-            likes.notifications.find(
-              (like) =>
-                like.username === profileUser.username &&
-                like.post_id === post.post_id
-            )
-          )
-          .sort((a, b) => {
-            const likeA = likes.notifications.find(
-              (like) =>
-                like.post_id === a.post_id &&
-                like.username === profileUser.username
-            );
-            const likeB = likes.notifications.find(
-              (like) =>
-                like.post_id === b.post_id &&
-                like.username === profileUser.username
-            );
-            return (
-              new Date(likeB!.date).getTime() - new Date(likeA!.date).getTime()
-            );
-          })
-          .map((post) => <Tweet key={post.post_id} post={post} />)}
+      <div className="divide-y divide-gray-600">
+        {displayedPosts.map((post) => (
+          <Tweet key={post.post_id} post={post} />
+        ))}
+
+        {hasMorePosts && (
+          <button
+            onClick={loadMorePosts}
+            disabled={loading}
+            className="w-full py-4 text-blue-400 hover:bg-gray-900 transition-colors disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Show more"}
+          </button>
+        )}
+      </div>
     </main>
   );
 }

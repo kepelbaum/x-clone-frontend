@@ -8,6 +8,29 @@ import Twemoji from "react-twemoji";
 import Image from "next/image";
 import { useLocalStorage } from "./useLocalStorage";
 
+const formatContent = (content: string | undefined) => {
+  if (!content) return [];
+
+  const parts = content.split(/(\s*#\w+)/g);
+
+  return parts.map((part, index) => {
+    if (part.trim().startsWith("#")) {
+      const hashtag = part.trim();
+      return (
+        <Link
+          key={index}
+          href={`/explore?key=${encodeURIComponent(hashtag)}`}
+          onClick={(e) => e.stopPropagation()}
+          className="text-blue-500 hover:underline relative z-10"
+        >
+          {hashtag}
+        </Link>
+      );
+    }
+    return <span key={index}>{` ${part} `}</span>;
+  });
+};
+
 export function Tweet({ post }: { post: Post }) {
   const token = useLocalStorage("token");
   const user = localStorage.getItem("username");
@@ -21,6 +44,10 @@ export function Tweet({ post }: { post: Post }) {
   const referenceUser = users.find(
     (u) => u.username === referencePost?.username
   );
+
+  const isPostPage =
+    window.location.pathname ===
+    `/posts/${referencePost?.post_id || post.post_id}`;
 
   async function handleLike(post_id: number) {
     const targetPostId = referencePost?.post_id || post_id;
@@ -136,12 +163,16 @@ export function Tweet({ post }: { post: Post }) {
     referencePost && (
       <Twemoji>
         <div
-          onClick={() =>
-            (window.location.href = `/posts/${
-              referencePost?.post_id || post.post_id
-            }`)
-          }
-          className="block hover:bg-gray-600/50 cursor-pointer"
+          onClick={() => {
+            if (!isPostPage) {
+              window.location.href = `/posts/${
+                referencePost?.post_id || post.post_id
+              }`;
+            }
+          }}
+          className={`block ${
+            !isPostPage ? "hover:bg-gray-600/50 cursor-pointer" : ""
+          }`}
         >
           <div className="flex flex-col">
             {post.ifretweet && (
@@ -243,7 +274,7 @@ export function Tweet({ post }: { post: Post }) {
 
                 <div className="block">
                   <p className="break-words">
-                    {referencePost?.content || post.content}
+                    {formatContent(referencePost?.content || post.content)}
                   </p>
                   {referencePost?.media_type === "image" &&
                     referencePost?.media_url && (
