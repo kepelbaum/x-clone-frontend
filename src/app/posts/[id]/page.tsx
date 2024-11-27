@@ -173,8 +173,8 @@ export default function Home() {
       <div className="w-full flex relative">
         <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
         <Navbar />
-        <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
-          <div className="sticky top-0 bg-black z-10">
+        <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-l-2 border-r-2">
+          <div className="sticky top-0 bg-black z-10 border-gray-600 border-b-2">
             <div className="flex items-center gap-6 px-4 py-3">
               <Link href="/home" className="p-2 hover:bg-gray-800 rounded-full">
                 <svg

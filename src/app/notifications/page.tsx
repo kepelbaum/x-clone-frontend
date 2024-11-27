@@ -68,7 +68,7 @@ function NotificationItem({
   const actor = users.find((u) => u.username === getUsernameForType());
 
   return (
-    <div className="flex gap-3 p-4 border- border-gray-600 hover:bg-gray-600/10">
+    <div className="flex gap-3 p-4 border-gray-600 hover:bg-gray-600/10">
       <div className="flex-shrink-0">
         {type === "like" && (
           <div className="w-10 h-10 flex items-center justify-center text-pink-500">
@@ -278,14 +278,14 @@ function NotificationsContent() {
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar />
-          <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-2">
+          <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-l-2 border-r-2">
             <div className="sticky top-0 z-10 bg-black/80 backdrop-blur">
               <div className="flex px-4 py-3 border border-gray-600">
                 <h1 className="text-xl font-bold">Notifications</h1>
               </div>
             </div>
 
-            <div className="divide-y divide-gray-600 border-2 border-gray-600">
+            <div className="divide-y divide-gray-600 border-b-2 border-gray-600">
               {allNotifications.map((notification, index) => (
                 <NotificationItem
                   key={`${notification.type}-${

@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import { useState, useMemo, useRef } from "react";
 import { useAppState } from "../lib/context";
 import { useHomeFetch } from "../lib/fetch";
@@ -163,25 +165,28 @@ export default function Messages() {
   }, [messages, selectedUser]);
 
   if (!posts || !messages || !currentUser) return null;
+
   return (
     posts &&
     users &&
     messages && (
-      <div className="md:pl-20 bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
+      <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
         <div className="w-full flex relative">
-          <div className="hidden md:block md:h-screen md:w-[calc((100vw-900px)/2)]"></div>
+          <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar />
-          <main className="z-30 w-full md:w-[900px] pb-16 md:pb-0 border-x border-gray-600">
+          <main className="z-30 w-full md:w-[900px] md:-ml-[100px] pb-20 md:pb-0 border-l-2 border-r-2 border-gray-600">
             <div className="flex h-screen">
               <div
                 className={`${
                   showChat ? "hidden md:block" : "w-full"
-                } md:w-[250px] lg:w-[320px] border-r border-gray-600`}
+                } md:w-[250px] lg:w-[320px] border-r border-gray-600 flex flex-col h-full`}
               >
-                <div className="p-4 border-b border-gray-600">
-                  <h2 className="ml-20 md:ml-0 text-xl font-bold">Messages</h2>
+                <div className="sticky top-0 bg-black border-b border-gray-600 z-10">
+                  <div className="p-4">
+                    <h2 className="text-xl font-bold">Messages</h2>
+                  </div>
                 </div>
-                <div className="overflow-y-auto h-[calc(100vh-65px)]">
+                <div className="overflow-y-auto flex-1 border-gray-600">
                   {relevantUsers.map((user) => (
                     <div
                       key={user.username}
@@ -190,7 +195,7 @@ export default function Messages() {
                         setShowChat(true);
                       }}
                       className={`flex items-center gap-3 p-4 hover:bg-gray-800 cursor-pointer border-b border-gray-600 
-                        ${selectedUser === user.username ? "bg-gray-800" : ""}`}
+    ${selectedUser === user.username ? "bg-gray-800" : ""}`}
                     >
                       <div className="relative w-10 h-10">
                         <Image
@@ -215,37 +220,39 @@ export default function Messages() {
               <div
                 className={`${
                   !showChat ? "hidden md:flex" : "w-full"
-                } flex-1 flex-col`}
+                } flex-1 flex flex-col h-full`}
               >
                 {selectedUser ? (
                   <>
-                    <div className="p-4 pl-20 md:pl-4 border-b border-gray-600">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => setShowChat(false)}
-                          className="md:hidden p-2 -ml-2 hover:bg-gray-800 rounded-full"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                    <div className="sticky top-0 bg-black border-b border-gray-600 z-10">
+                      <div className="p-4">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setShowChat(false)}
+                            className="md:hidden p-2 hover:bg-gray-800 rounded-full"
                           >
-                            <path d="M19 12H5M12 19l-7-7 7-7" />
-                          </svg>
-                        </button>
-                        <h3 className="font-bold">{selectedUser}</h3>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M19 12H5M12 19l-7-7 7-7" />
+                            </svg>
+                          </button>
+                          <h3 className="font-bold">{selectedUser}</h3>
+                        </div>
                       </div>
                     </div>
                     <div
                       ref={chatContainerRef}
                       onScroll={handleScroll}
-                      className="flex-1 overflow-y-auto p-4"
+                      className="flex-1 overflow-y-auto p-4 mb-16 md:mb-0"
                     >
                       <div className="flex flex-col gap-3">
                         {conversationMessages.map((message, idx) => (
@@ -296,7 +303,7 @@ export default function Messages() {
                         <div ref={messagesEndRef} />
                       </div>
                     </div>
-                    <div className="border-t border-gray-600 p-4">
+                    <div className="fixed bottom-16 md:static w-full bg-black border-t border-gray-600 p-4">
                       <form onSubmit={submitMessage} className="flex gap-2">
                         <input
                           type="text"

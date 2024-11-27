@@ -8,11 +8,11 @@ export function Navbar() {
   const { logout } = useAppState();
   return (
     <div
-      className="fixed bottom-0 w-full md:w-[50px] flex-shrink-0 xl:w-[220px] xl:left-[calc(40px+(100vw-1280px)/200*90)] md:left-[calc((100vw-768px)/512*150)] h-16 border-t-2 border-gray-400 md:border-0 md:w-[50px] md:top-0 bg-black 
+      className="fixed bottom-0 w-full md:w-[45px] flex-shrink-0 xl:w-[200px] xl:left-[calc(40px+(100vw-1280px)/200*90)] md:left-[calc((100vw-768px)/512*150)] h-16 border-t-2 border-gray-400 md:border-0 md:w-[50px] md:top-0 bg-black 
       flex md:flex-col justify-around md:gap-5 md:justify-start xl:items-start items-center md:items-center 
-      md:h-screen z-20 mb-${mb} md:m-0"
+      md:h-screen z-50 mb-${mb} md:m-0"
     >
-      <div className="fixed md:static top-0 left-5 md:block">
+      <div className="fixed hidden md:static top-0 left-5 md:block">
         <Image
           src="/X_logo.jpg"
           alt="X logo"
