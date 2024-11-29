@@ -151,7 +151,10 @@ export function Navbar() {
         <p className="font-semibold text-xl hidden xl:block">Settings</p>
       </Link>
 
-      <div className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3">
+      <div
+        className="flex gap-5 items-center hover:bg-gray-800 rounded-full cursor-pointer md:py-3 md:px-5 md:-mx-5 md:-my-3"
+        onClick={logout}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -168,9 +171,7 @@ export function Navbar() {
           <polyline points="16 17 21 12 16 7" />
           <line x1="21" x2="9" y1="12" y2="12" />
         </svg>
-        <p className="font-semibold text-xl hidden xl:block" onClick={logout}>
-          Logout
-        </p>
+        <p className="font-semibold text-xl hidden xl:block">Logout</p>
       </div>
     </div>
   );
