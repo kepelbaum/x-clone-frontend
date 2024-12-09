@@ -54,6 +54,7 @@ Both repositories required for full functionality:
 ## Future Improvements
 - Revisit responsive design for mobile resolutions - mainly message autoscroll (highest priority)
 - Minor UI fixes (mainly login screen)
+- Refactor large components & standardize naming and structure
 - Use Faker.js to populate the app with mock data (users, posts, messages)
 - Further UI improvements or extra features (quote replies, images in private messages, etc)
 
