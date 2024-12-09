@@ -18,7 +18,7 @@ A full-stack X (formerly Twitter) clone featuring posts, replies, media sharing,
 
 ## Tech Stack
 ### Frontend
-- Next.js
+- Next.js (TypeScript)
 - Tailwind CSS
 - Deployed on Vercel
 
