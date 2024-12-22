@@ -168,23 +168,23 @@ export default function Messages() {
     posts &&
     users &&
     messages && (
-      <div className="bg-black text-white min-h-screen w-screen box-border md:overflow-y-scroll">
-        <div className="w-full flex relative">
-          <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
+      <div className="bg-black text-white h-[calc(100vh-64px)] md:h-screen w-screen">
+        <div className="flex h-full">
+          <div className="hidden md:block md:w-[calc((100vw-600px)/2)]" />
           <Navbar />
-          <main className="z-30 w-full md:w-[900px] md:-ml-[calc(18px+((100vw-768px)/672*57))] xl:-ml-[calc(75px+((100vw-1440px)/1120*35))] pb-20 md:pb-0 border-l-2 border-r-2 border-gray-600">
-            <div className="flex h-screen">
+          <main className="z-30 w-full md:w-[900px] md:-ml-[calc(18px+((100vw-768px)/672*57))] xl:-ml-[calc(75px+((100vw-1440px)/1120*35))] border-l-2 border-r-2 border-gray-600">
+            <div className="flex h-[calc(100vh-64px)] md:h-screen">
               <div
                 className={`${
                   showChat ? "hidden md:block" : "w-full"
-                } md:w-[250px] lg:w-[320px] border-r border-gray-600 flex flex-col h-full`}
+                } md:w-[250px] lg:w-[320px] border-r border-gray-600 h-[calc(100vh-64px)] md:h-screen flex flex-col`}
               >
-                <div className="sticky top-0 bg-black border-b border-gray-600 z-10">
+                <div className="h-14 bg-black border-b border-gray-600 z-10">
                   <div className="p-4">
                     <h2 className="text-xl font-bold">Messages</h2>
                   </div>
                 </div>
-                <div className="overflow-y-auto flex-1 border-gray-600">
+                <div className="flex-1 overflow-y-auto">
                   {relevantUsers.map((user) => (
                     <div
                       key={user.username}
@@ -218,11 +218,11 @@ export default function Messages() {
               <div
                 className={`${
                   !showChat ? "hidden md:flex" : "w-full"
-                } flex-1 flex flex-col h-full`}
+                } h-[calc(100vh-64px)] md:h-screen flex flex-col`}
               >
                 {selectedUser ? (
                   <>
-                    <div className="sticky top-0 bg-black border-b border-gray-600 z-10">
+                    <div className="h-14 bg-black border-b border-gray-600 z-10">
                       <div className="p-4">
                         <div className="flex items-center gap-3">
                           <button
@@ -250,7 +250,7 @@ export default function Messages() {
                     <div
                       ref={chatContainerRef}
                       onScroll={handleScroll}
-                      className="flex-1 overflow-y-auto p-4 mb-16 md:mb-0"
+                      className="flex-1 overflow-y-auto p-4 mb-[72px] md:mb-0"
                     >
                       <div className="flex flex-col gap-3">
                         {conversationMessages.map((message, idx) => (
@@ -301,7 +301,7 @@ export default function Messages() {
                         <div ref={messagesEndRef} />
                       </div>
                     </div>
-                    <div className="fixed bottom-16 md:static w-full bg-black border-t border-gray-600 p-4">
+                    <div className="fixed bottom-16 w-full bg-black border-t border-gray-600 p-4 md:static">
                       <form onSubmit={submitMessage} className="flex gap-2">
                         <input
                           type="text"
