@@ -19,7 +19,7 @@ export default function Home() {
         alt="X logo"
         width={500}
         height={500}
-        className="w-[150px] h-[150px] md:w-[500px] md:h-[500px]"
+        className="w-[150px] h-[150px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px]"
       ></Image>
       <div className="md:flex md:flex-col flex flex-col md:flex-row justify-center items-center gap-10">
         <p className="text-4xl font-bold">Happening Now</p>
