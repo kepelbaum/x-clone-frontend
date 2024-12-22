@@ -280,7 +280,7 @@ function NotificationsContent() {
           <Navbar />
           <main className="w-full md:w-[600px] pb-16 md:pb-0 border-gray-600 border-l-2 border-r-2">
             <div className="sticky top-0 z-10 bg-black/80 backdrop-blur">
-              <div className="flex px-4 py-3 border border-gray-600">
+              <div className="flex px-4 py-3 border-b border-gray-600">
                 <h1 className="text-xl font-bold">Notifications</h1>
               </div>
             </div>

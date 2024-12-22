@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { useState, useMemo, useRef } from "react";
 import { useAppState } from "../lib/context";
 import { useHomeFetch } from "../lib/fetch";
@@ -174,7 +172,7 @@ export default function Messages() {
         <div className="w-full flex relative">
           <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
           <Navbar />
-          <main className="z-30 w-full md:w-[900px] md:-ml-[100px] pb-20 md:pb-0 border-l-2 border-r-2 border-gray-600">
+          <main className="z-30 w-full md:w-[900px] md:-ml-[calc(18px+((100vw-768px)/672*57))] xl:-ml-[calc(75px+((100vw-1440px)/1120*35))] pb-20 md:pb-0 border-l-2 border-r-2 border-gray-600">
             <div className="flex h-screen">
               <div
                 className={`${

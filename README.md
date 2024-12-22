@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Backend code found here: https://github.com/kepelbaum/x-clone-backend
 
-## Getting Started
+# X Clone
+A full-stack X (formerly Twitter) clone featuring posts, replies, media sharing, messaging, and notifications.
 
-First, run the development server:
+## Features
+- Posts with image/video support (with search function for text content)
+- Reply chains and retweets
+- Emoji and GIF integration (Giphy API)
+- Direct messaging
+- Profile customization
+- Follow system with suggestions
+- Trending hashtags
+- Real-time notifications
+- Post pagination
+- JWT authentication
+- Responsive design
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+### Frontend
+- Next.js (TypeScript)
+- Tailwind CSS
+- Deployed on Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Backend
+- Java Spring Boot
+- PostgreSQL
+- Cloudinary for media storage
+- RESTful API architecture
+- Deployed on Railway
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Live App
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Try it here: [X Clone](https://nu-gold.vercel.app/)
 
-## Learn More
+## Local Development
+### Frontend
+1. `git clone https://github.com/kepelbaum/x-clone-frontend`
+2. `cd x-clone-frontend`
+3. `npm install`
+4. Configure environment variables
+5. `npm run dev` for development
 
-To learn more about Next.js, take a look at the following resources:
+### Backend
+1. `git clone https://github.com/kepelbaum/x-clone-backend`
+2. `cd x-clone-backend`
+3. Configure application.properties with PostgreSQL and Cloudinary credentials
+4. Run Spring Boot application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Both repositories required for full functionality:
+- Frontend: [x-clone-frontend](https://github.com/kepelbaum/x-clone-frontend)
+- Backend: [x-clone-backend](https://github.com/kepelbaum/x-clone-backend)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Future Improvements
+- Revisit responsive design for mobile resolutions - mainly message autoscroll (highest priority)
+- Minor UI fixes (mainly login screen)
+- Refactor large components & standardize naming and structure
+- Use Faker.js to populate the app with mock data (users, posts, messages)
+- Further UI improvements or extra features (quote replies, images in private messages, etc)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Feel free to contribute or report issues!

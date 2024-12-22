@@ -114,8 +114,7 @@ function ExploreContent() {
       <div className="w-full flex relative">
         <div className="hidden md:block md:h-screen md:w-[calc((100vw-600px)/2)]"></div>
         <Navbar />
-
-        <main className="w-full md:w-[600px] pb-16 md:pb-0 border-x border-gray-600">
+        <main className="w-full md:w-[600px] pb-16 md:pb-0 border-2 border-gray-600">
           <div className="sticky top-0 z-10 bg-black/80">
             <div className="px-4 py-3">
               <div className="relative">
