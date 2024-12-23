@@ -14,7 +14,10 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10">
-      <div className="w-[250px] h-[250px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px] relative">
+      <div
+        style={{ width: "150px", height: "150px" }}
+        className="w-[150px] h-[150px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px] relative"
+      >
         <Image
           src="/X_logo.jpg"
           alt="X logo"
