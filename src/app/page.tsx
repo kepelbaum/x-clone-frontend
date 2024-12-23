@@ -13,7 +13,7 @@ export default function Home() {
   const { errors } = useAppState();
 
   return (
-    <div className="w-screen h-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10">
+    <div className="min-h-screen h-screen w-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10 md:overflow-hidden overflow-y-auto py-10 md:py-0">
       <Image
         src="/X_logo.jpg"
         alt="X logo"
