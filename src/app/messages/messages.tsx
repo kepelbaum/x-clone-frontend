@@ -133,11 +133,22 @@ export default function Messages() {
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    return `${hours > 12 ? hours - 12 : hours}:${minutes
+    const timeStr = `${hours > 12 ? hours - 12 : hours}:${minutes
       .toString()
       .padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
+
+    if (isToday) {
+      return timeStr;
+    }
+
+    return `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()} ${timeStr}`;
   };
 
   useEffect(() => {
@@ -250,7 +261,7 @@ export default function Messages() {
                     <div
                       ref={chatContainerRef}
                       onScroll={handleScroll}
-                      className="flex-1 overflow-y-auto p-4 mb-[104px] md:mb-0"
+                      className="flex-1 overflow-y-auto p-4 mb-[110px] md:mb-0"
                     >
                       <div className="flex flex-col gap-3">
                         {conversationMessages.map((message, idx) => (
