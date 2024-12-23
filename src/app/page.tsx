@@ -13,22 +13,19 @@ export default function Home() {
   const { errors } = useAppState();
 
   return (
-    <div className="w-screen h-screen bg-black text-white flex flex-col md:flex-row justify-center items-center gap-10">
-      <div
-        style={{ width: "150px", height: "150px" }}
-        className="w-[150px] h-[150px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px] relative"
-      >
-        <Image
-          src="/X_logo.jpg"
-          alt="X logo"
-          fill
-          sizes="(max-width: 768px) 150px,
-       (max-width: 1024px) 350px,
-       500px"
-          className="object-contain"
-        ></Image>
-      </div>
-      <div className="md:flex md:flex-col flex flex-col md:flex-row justify-center items-center gap-10">
+    <div className="min-h-screen bg-black text-white flex flex-col md:flex-row justify-start md:justify-center items-center gap-10 p-10">
+      <Image
+        src="/X_logo.jpg"
+        alt="X logo"
+        width={500}
+        height={500}
+        priority
+        sizes="(max-width: 768px) 150px,
+         (max-width: 1024px) 350px,
+         500px"
+        className="w-[150px] h-[150px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px] flex-shrink-0"
+      />
+      <div className="flex flex-col items-center gap-10 text-center md:text-left w-full md:w-auto">
         <p className="text-4xl font-bold">Happening Now</p>
         <p className="text-3xl font-bold">Join today.</p>
         {typeof errors === "string" ? (
