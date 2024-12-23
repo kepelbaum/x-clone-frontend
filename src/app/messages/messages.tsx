@@ -332,7 +332,7 @@ export default function Messages() {
                     </div>
                   </>
                 ) : (
-                  <div className="flex items-center justify-center h-full text-gray-500">
+                  <div className="flex items-center justify-center h-full w-full text-gray-500">
                     Select a conversation to start messaging
                   </div>
                 )}
