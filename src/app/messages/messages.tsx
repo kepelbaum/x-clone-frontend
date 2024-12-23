@@ -250,7 +250,7 @@ export default function Messages() {
                     <div
                       ref={chatContainerRef}
                       onScroll={handleScroll}
-                      className="flex-1 overflow-y-auto p-4 mb-[96px] md:mb-0"
+                      className="flex-1 overflow-y-auto p-4 mb-[104px] md:mb-0"
                     >
                       <div className="flex flex-col gap-3">
                         {conversationMessages.map((message, idx) => (
