@@ -250,7 +250,7 @@ export default function Messages() {
                     <div
                       ref={chatContainerRef}
                       onScroll={handleScroll}
-                      className="flex-1 overflow-y-auto p-4 mb-[90px] md:mb-0"
+                      className="flex-1 overflow-y-auto p-4 mb-[96px] md:mb-0"
                     >
                       <div className="flex flex-col gap-3">
                         {conversationMessages.map((message, idx) => (
@@ -285,7 +285,7 @@ export default function Messages() {
                               </div>
                             </Link>
                             <div
-                              className={`max-w-[70%] p-3 rounded-2xl ${
+                              className={`max-w-[70%] p-3 rounded-2xl break-words ${
                                 message.sender === currentUser
                                   ? "bg-blue-500 text-white"
                                   : "bg-gray-800"
